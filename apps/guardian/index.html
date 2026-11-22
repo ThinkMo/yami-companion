@@ -1,0 +1,3659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>芽米学习伙伴 · 家长端</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       方案 1 · 晨光白瓷（Google Workspace 3-Column Clean Porcelain Design Tokens）
+       Seed: Google Blue (#1A73E8) + Pure White (#FFFFFF) + Cool Mist (#F7F9FC)
+       ========================================================================== */
+    :root {
+      --md-sys-color-primary: #1A73E8;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #E8F0FE;
+      --md-sys-color-on-primary-container: #174EA6;
+
+      --md-sys-color-secondary: #137333;
+      --md-sys-color-on-secondary: #FFFFFF;
+      --md-sys-color-secondary-container: #E6F4EA;
+      --md-sys-color-on-secondary-container: #0D652D;
+
+      --md-sys-color-tertiary: #B06000;
+      --md-sys-color-on-tertiary: #FFFFFF;
+      --md-sys-color-tertiary-container: #FEF7E0;
+      --md-sys-color-on-tertiary-container: #8A4A00;
+
+      --md-sys-color-error: #C5221F;
+      --md-sys-color-on-error: #FFFFFF;
+      --md-sys-color-error-container: #FCE8E6;
+      --md-sys-color-on-error-container: #A50E0E;
+
+      --md-sys-color-surface: #FFFFFF;
+      --md-sys-color-surface-dim: #EEF2F7;
+      --md-sys-color-surface-container-lowest: #FFFFFF;
+      --md-sys-color-surface-container-low: #F7F9FC;
+      --md-sys-color-surface-container: #F4F6FA;
+      --md-sys-color-surface-container-high: #EDF1F7;
+      --md-sys-color-surface-container-highest: #E3E8EF;
+
+      --md-sys-color-on-surface: #1F1F1F;
+      --md-sys-color-on-surface-variant: #5F6368;
+      --md-sys-color-outline: #9AA0A6;
+      --md-sys-color-outline-variant: #E3E8EF;
+
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+      --md-sys-shape-corner-full: 9999px;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(24, 29, 26, 0.06), 0 1px 3px 1px rgba(24, 29, 26, 0.05);
+      --md-sys-elevation-2: 0 2px 6px 2px rgba(24, 29, 26, 0.08), 0 1px 2px rgba(24, 29, 26, 0.06);
+      --md-sys-elevation-3: 0 4px 12px 3px rgba(24, 29, 26, 0.12), 0 1px 3px rgba(24, 29, 26, 0.08);
+
+      --md-sys-motion-standard: cubic-bezier(0.2, 0, 0, 1);
+      --md-sys-motion-duration: 220ms;
+
+      font-family: "Plus Jakarta Sans", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scrollbar-gutter: stable;
+      container-type: scroll-state;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      min-block-size: 100dvb;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.5;
+    }
+
+    svg { display: block; flex-shrink: 0; }
+
+    /* ==========================================================================
+       Responsive App Shell (M3 Navigation Rail on Desktop, Bottom Bar on Mobile)
+       ========================================================================== */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "topbar"
+        "main";
+      min-block-size: 100dvb;
+    }
+
+    /* Compact single-row sticky Top App Bar (< 12% viewport height) */
+    .top-bar {
+      grid-area: topbar;
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 10;
+      display: flex;
+      align-items: safe center;
+      gap: 12px;
+      min-block-size: 64px;
+      padding-inline: 16px;
+      padding-block: 10px;
+      background: color-mix(in srgb, var(--md-sys-color-surface) 92%, transparent);
+      backdrop-filter: blur(12px);
+      border-block-end: 1px solid var(--md-sys-color-outline-variant);
+      transition: transform var(--md-sys-motion-duration) var(--md-sys-motion-standard);
+    }
+
+    @container scroll-state((scrolled: bottom) and (scrollable: top)) {
+      .top-bar { transform: translateY(-100%); }
+    }
+    .top-bar.is-hidden:not(:focus-within) { transform: translateY(-100%); }
+    .top-bar:focus-within { transform: none; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-inline-size: 0;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      inline-size: 36px;
+      block-size: 36px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+    .brand-title {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--md-sys-color-on-surface-variant);
+      display: none;
+    }
+
+    .top-bar-actions {
+      margin-inline-start: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* M3 Student Switcher Chip + Native Popover Menu */
+    .student-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding-inline: 14px 10px;
+      padding-block: 8px;
+      border-radius: var(--md-sys-shape-corner-full);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--md-sys-motion-duration) var(--md-sys-motion-standard);
+    }
+    .student-trigger:hover { background: var(--md-sys-color-surface-container-low); }
+    .student-avatar {
+      display: grid;
+      place-items: center;
+      inline-size: 24px;
+      block-size: 24px;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Native Popover Menu (M3 Menu Surface) */
+    [popover] {
+      margin: auto;
+      padding: 8px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-large);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      box-shadow: var(--md-sys-elevation-3);
+      min-inline-size: 240px;
+      max-inline-size: min(320px, calc(100dvw - 32px));
+    }
+    [popover]:is(:popover-open, .\:popover-open) {
+      display: grid;
+      gap: 4px;
+    }
+    [popover]::backdrop {
+      background: rgba(24, 29, 26, 0.16);
+    }
+    .menu-heading {
+      padding-inline: 12px;
+      padding-block: 8px 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface-variant);
+      letter-spacing: 0.02em;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      inline-size: 100%;
+      padding-inline: 12px;
+      padding-block: 10px;
+      border: 0;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      font: inherit;
+      font-size: 0.9375rem;
+      text-align: start;
+      cursor: pointer;
+    }
+    .menu-item:hover { background: var(--md-sys-color-surface-container); }
+    .menu-item[aria-checked="true"] {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-weight: 600;
+    }
+    .menu-item-meta {
+      margin-inline-start: auto;
+      font-size: 0.75rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* Navigation Rail (Desktop) & Bottom Navigation Bar (Mobile) */
+    .nav-shell {
+      position: fixed;
+      inset-inline: 0;
+      inset-block-end: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding-inline: 8px;
+      padding-block: 8px calc(8px + env(safe-area-inset-bottom));
+      background: var(--md-sys-color-surface-container-low);
+      border-block-start: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding-block: 4px;
+      border: 0;
+      background: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .nav-pill {
+      display: grid;
+      place-items: center;
+      inline-size: 56px;
+      block-size: 32px;
+      border-radius: var(--md-sys-shape-corner-full);
+      transition: background var(--md-sys-motion-duration) var(--md-sys-motion-standard),
+                  color var(--md-sys-motion-duration) var(--md-sys-motion-standard);
+    }
+    .nav-btn:hover .nav-pill {
+      background: var(--md-sys-color-surface-container-high);
+    }
+    .nav-btn[aria-selected="true"] {
+      color: var(--md-sys-color-on-surface);
+    }
+    .nav-btn[aria-selected="true"] .nav-pill {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    /* Main Content Container */
+    .main-area {
+      grid-area: main;
+      inline-size: 100%;
+      max-inline-size: 960px;
+      margin-inline: auto;
+      padding-inline: 16px;
+      padding-block: 20px 104px;
+      container: main-content / inline-size;
+    }
+
+    @media (min-width: 840px) {
+      .app-shell {
+        grid-template-columns: 88px 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+          "rail topbar"
+          "rail main";
+      }
+      .brand-sub { display: inline; }
+      .nav-shell {
+        grid-area: rail;
+        position: sticky;
+        inset-block-start: 0;
+        inset-inline: auto;
+        inset-block-end: auto;
+        block-size: 100dvb;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding-block: 20px;
+        padding-inline: 8px;
+        border-block-start: 0;
+        border-inline-end: 1px solid var(--md-sys-color-outline-variant);
+      }
+      .main-area {
+        padding-inline: 32px;
+        padding-block: 24px 48px;
+      }
+    }
+
+    /* ==========================================================================
+       M3 Typography, Cards, Buttons, Chips, Inputs
+       ========================================================================== */
+    .view-panel { display: none; }
+    .view-panel.active { display: grid; gap: 20px; }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .headline-sm {
+      margin: 0;
+      font-size: 1.375rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--md-sys-color-on-surface);
+    }
+    .title-md {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+    }
+    .body-sm {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* Status Strip (Compact, Non-Blocking) */
+    .sync-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding-inline: 16px;
+      padding-block: 12px;
+      border-radius: var(--md-sys-shape-corner-large);
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      font-size: 0.875rem;
+    }
+    .sync-strip.is-warn {
+      background: var(--md-sys-color-tertiary-container);
+      border-color: color-mix(in srgb, var(--md-sys-color-tertiary) 35%, transparent);
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+    .sync-dot {
+      inline-size: 8px;
+      block-size: 8px;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: var(--md-sys-color-primary);
+    }
+    .sync-strip.is-warn .sync-dot { background: var(--md-sys-color-tertiary); }
+
+    /* M3 Card Variants */
+    .md-card {
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-large);
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .md-card-elevated {
+      border-color: transparent;
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .md-card-tonal {
+      background: var(--md-sys-color-surface-container-low);
+      border-color: transparent;
+    }
+    .md-card-attention {
+      background: color-mix(in srgb, var(--md-sys-color-tertiary-container) 45%, var(--md-sys-color-surface-container-lowest));
+      border-color: color-mix(in srgb, var(--md-sys-color-tertiary) 35%, transparent);
+    }
+
+    /* Container-query responsive grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @container main-content (inline-size > 620px) {
+      .card-grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* M3 Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-block-size: 40px;
+      padding-inline: 20px;
+      padding-block: 8px;
+      border-radius: var(--md-sys-shape-corner-full);
+      border: 1px solid transparent;
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--md-sys-motion-duration) var(--md-sys-motion-standard),
+                  box-shadow var(--md-sys-motion-duration) var(--md-sys-motion-standard),
+                  border-color var(--md-sys-motion-duration) var(--md-sys-motion-standard);
+    }
+    .btn:focus-visible,
+    .student-trigger:focus-visible,
+    .nav-btn:focus-visible,
+    .chip:focus-visible,
+    .md-input:focus-visible {
+      outline: 2px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+    .btn-filled {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+    .btn-filled:hover {
+      background: color-mix(in srgb, var(--md-sys-color-primary) 90%, #000);
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .btn-tonal {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+    .btn-tonal:hover {
+      background: color-mix(in srgb, var(--md-sys-color-secondary-container) 92%, #000);
+    }
+    .btn-outlined {
+      background: transparent;
+      border-color: var(--md-sys-color-outline);
+      color: var(--md-sys-color-primary);
+    }
+    .btn-outlined:hover {
+      background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+    }
+    .btn-text {
+      background: transparent;
+      color: var(--md-sys-color-primary);
+      padding-inline: 12px;
+    }
+    .btn-text:hover {
+      background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+    }
+    .btn-danger-tonal {
+      background: var(--md-sys-color-error-container);
+      color: var(--md-sys-color-on-error-container);
+    }
+    .btn-danger-tonal:hover {
+      background: color-mix(in srgb, var(--md-sys-color-error-container) 90%, #000);
+    }
+    .btn-danger-filled {
+      background: var(--md-sys-color-error);
+      color: var(--md-sys-color-on-error);
+    }
+    .btn-sm {
+      min-block-size: 34px;
+      padding-inline: 14px;
+      font-size: 0.8125rem;
+    }
+
+    /* M3 Badges & Chips */
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      flex-wrap: balance;
+      gap: 8px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding-inline: 10px;
+      padding-block: 4px;
+      border-radius: var(--md-sys-shape-corner-small);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-primary {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+    .badge-neutral {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .badge-warn {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+    .badge-error {
+      background: var(--md-sys-color-error-container);
+      color: var(--md-sys-color-on-error-container);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      flex-wrap: balance;
+      gap: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-block-size: 34px;
+      padding-inline: 14px;
+      border-radius: var(--md-sys-shape-corner-small);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface-variant);
+      font: inherit;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chip:hover { background: var(--md-sys-color-surface-container-low); }
+    .chip[aria-pressed="true"] {
+      background: var(--md-sys-color-secondary-container);
+      border-color: transparent;
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    /* M3 Filled / Outlined Inputs */
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .md-input {
+      inline-size: 100%;
+      min-block-size: 46px;
+      padding-inline: 14px;
+      padding-block: 10px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      border: 1px solid var(--md-sys-color-outline);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      font: inherit;
+      font-size: 0.9375rem;
+    }
+    .md-input:focus {
+      border-color: var(--md-sys-color-primary);
+    }
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .input-row .md-input {
+      flex: 1 1 220px;
+      min-inline-size: 0;
+    }
+
+    /* Native Details / Summary Disclosure (Zero JS) */
+    details.md-disclosure {
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--md-sys-color-surface-container-low);
+      padding-inline: 14px;
+      padding-block: 10px;
+    }
+    details.md-disclosure > summary {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--md-sys-color-primary);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    details.md-disclosure > summary::-webkit-details-marker { display: none; }
+    details.md-disclosure[open] > summary { margin-block-end: 8px; }
+
+    /* Assignment Item Card */
+    .asg-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .asg-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+    }
+    .asg-meta {
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-block-start: 2px;
+    }
+    .divider {
+      border: 0;
+      border-block-start: 1px solid var(--md-sys-color-outline-variant);
+      margin: 0;
+    }
+
+    /* Setting Row */
+    .setting-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-block: 12px;
+      border-block-end: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .setting-row:last-child { border-block-end: 0; padding-block-end: 0; }
+    .setting-info { min-inline-size: 0; flex: 1 1 240px; }
+
+    /* Pairing Code Box */
+    .pairing-hero {
+      display: grid;
+      gap: 14px;
+      background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-surface-container-low) 100%);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      padding: 24px;
+    }
+    .pairing-input {
+      max-inline-size: 210px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       Native Modal <dialog> (Modern Web Guidance Mandatory Rules)
+       ========================================================================== */
+    dialog:modal {
+      overscroll-behavior: contain;
+      max-inline-size: min(420px, calc(100dvw - 32px));
+      inline-size: 100%;
+      padding: 24px;
+      border: 0;
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      box-shadow: var(--md-sys-elevation-3);
+    }
+    dialog::backdrop {
+      background: rgba(24, 29, 26, 0.42);
+      backdrop-filter: blur(3px);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+    .dialog-title {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .dialog-body {
+      margin: 0 0 20px;
+      font-size: 0.9375rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Non-blocking M3 Snackbar */
+    .snackbar {
+      position: fixed;
+      inset-inline-start: 50%;
+      inset-block-end: 84px;
+      transform: translateX(-50%) translateY(16px);
+      z-index: 40;
+      max-inline-size: min(460px, calc(100dvw - 32px));
+      padding-inline: 18px;
+      padding-block: 12px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: #2C312E;
+      color: #F1F5EF;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--md-sys-elevation-3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms var(--md-sys-motion-standard), transform 200ms var(--md-sys-motion-standard);
+    }
+    .snackbar.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    @media (min-width: 840px) {
+      .snackbar { inset-block-end: 24px; }
+    }
+
+    /* ==========================================================================
+       1:1 Forest Cream Polaroid Pet House Card (480x480 Reference Style)
+       ========================================================================== */
+    .pet-polaroid-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @container main-content (inline-size > 760px) {
+      .pet-polaroid-layout {
+        grid-template-columns: 480px 1fr;
+      }
+    }
+    .pet-polaroid-screen {
+      width: 100%;
+      max-width: 480px;
+      height: 480px;
+      margin-inline: auto;
+      border-radius: 36px;
+      overflow: hidden;
+      background: #F6F3E9;
+      color: #1D2E26;
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 14px 36px rgba(24, 34, 28, 0.14), inset 0 0 0 1.5px #E5DFCE;
+      user-select: none;
+    }
+    .pp-top-card {
+      background: #FFFFFF;
+      border: 1.5px solid #E5DFCE;
+      border-radius: 22px;
+      padding: 11px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(42, 58, 48, 0.05);
+    }
+    .pp-row1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .pp-pet-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1B2D24;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pp-hab-pill {
+      font-size: 12px;
+      font-weight: 700;
+      color: #267552;
+      background: #E3F3EB;
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+    .pp-coin-pill {
+      background: linear-gradient(135deg, #FFF4D2, #FDE6A2);
+      color: #8F5B0A;
+      border: 1px solid #EBC96E;
+      padding: 3px 13px;
+      border-radius: 99px;
+      font-size: 13.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .pp-bars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .pp-bar-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #495E53;
+      white-space: nowrap;
+    }
+    .pp-bar-track {
+      flex: 1;
+      height: 11px;
+      background: #EBE6D8;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .pp-bar-diet {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #289E67, #56CF94);
+      transition: width 320ms ease, background 320ms ease;
+    }
+    .pp-bar-diet.is-hungry {
+      background: linear-gradient(90deg, #E68C28, #F8B84E);
+    }
+    .pp-bar-mood {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #F06884, #FF9BB0);
+      transition: width 320ms ease;
+    }
+    .pp-stage {
+      height: 298px;
+      border-radius: 26px;
+      border: 4.5px solid #FFFFFF;
+      box-shadow: 0 10px 26px rgba(45, 58, 48, 0.14);
+      position: relative;
+      overflow: hidden;
+      background: #243028;
+    }
+    .pp-stage-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 360ms ease;
+    }
+    .pp-stage.state-hungry_sad .pp-stage-img {
+      filter: saturate(0.68) brightness(0.84) contrast(1.02);
+    }
+    .pp-stage.state-runaway .pp-stage-img {
+      filter: saturate(0.88) brightness(0.92);
+    }
+    .pp-sprite-wrap {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      width: 156px;
+      height: 156px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 3;
+      transition: left 140ms linear;
+    }
+    .pp-sprite-shadow {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      width: 92px;
+      height: 20px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(64, 48, 32, 0.34) 0%, rgba(64, 48, 32, 0) 72%);
+    }
+    .pp-sprite-actor {
+      width: 156px;
+      height: 156px;
+      background-repeat: no-repeat;
+      background-size: 400% 400%;
+      background-position: 0% 0%;
+      image-rendering: auto;
+      filter: drop-shadow(0 6px 10px rgba(45, 58, 48, 0.16));
+      transform-origin: center bottom;
+    }
+    .pp-mood-pill {
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      color: #1B4E37;
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: 12.5px;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+      z-index: 4;
+    }
+    .pp-mood-pill.is-hungry {
+      background: rgba(255, 243, 216, 0.95);
+      color: #9C5214;
+    }
+    .pp-mood-pill.is-runaway {
+      background: rgba(255, 235, 232, 0.96);
+      color: #B42222;
+    }
+    .pp-heart-fx {
+      position: absolute;
+      right: 54px;
+      top: 46px;
+      width: 36px;
+      height: 36px;
+      pointer-events: none;
+      z-index: 5;
+      animation: pp-heart-rise 2.2s ease-in-out infinite;
+    }
+    .pp-heart-fx.h2 {
+      right: 118px;
+      top: 62px;
+      width: 30px;
+      height: 30px;
+      animation-delay: 0.45s;
+    }
+    .pp-heart-fx.h3 {
+      right: 84px;
+      top: 34px;
+      width: 28px;
+      height: 28px;
+      animation-delay: 0.9s;
+    }
+    @keyframes pp-heart-rise {
+      0% { transform: translateY(14px) scale(0.82); opacity: 0.15; }
+      50% { transform: translateY(-6px) scale(1.1); opacity: 0.96; }
+      100% { transform: translateY(-24px) scale(0.9); opacity: 0; }
+    }
+    .pp-food-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .pp-food-slot {
+      height: 46px;
+      border-radius: 18px;
+      background: #EAE5D7;
+      border: 1.5px solid #DDD6C4;
+      color: #4D6055;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 140ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+    .pp-food-slot:hover {
+      transform: translateY(-1px);
+    }
+    .pp-food-slot img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+    .pp-food-slot.active {
+      background: #1F6B4B;
+      border-color: #1F6B4B;
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(31, 107, 75, 0.26);
+    }
+    .pp-recall-btn {
+      grid-column: 1 / -1;
+      height: 46px;
+      border-radius: 18px;
+      background: linear-gradient(90deg, #D14949, #B83030);
+      border: 1.5px solid #A42626;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(184, 48, 48, 0.32);
+    }
+  </style>
+  <style>
+    /* Modern Web Guidance (tabs, card, forms, accessibility) enhancements */
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+    .skip-link:focus-visible {
+      position: fixed;
+      inset-block-start: 12px;
+      inset-inline-start: 12px;
+      z-index: 999;
+      background: var(--md-sys-color-primary);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    :where(a:any-link, button, input, select, textarea, summary):focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+    .nav-btn { position: relative; flex: none; }
+    .nav-btn[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      inset: auto 14px 2px;
+      border-block-end: 3px solid var(--md-sys-color-primary);
+      border-radius: 3px;
+    }
+    .md-card { container-type: inline-size; }
+    .md-input { font: inherit; font-size: max(1rem, 1em); min-block-size: 48px; }
+    .growth-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .growth-table caption {
+      text-align: start;
+      font-size: 0.8125rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-block-end: 8px;
+    }
+    .growth-table th, .growth-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      text-align: start;
+    }
+    .growth-table th { font-weight: 600; color: var(--md-sys-color-on-surface-variant); }
+    .progress-track {
+      inline-size: 100%;
+      block-size: 8px;
+      border-radius: 999px;
+      background: var(--md-sys-color-surface-container-high, #EAE5D7);
+      overflow: hidden;
+    }
+    .progress-fill {
+      block-size: 100%;
+      border-radius: 999px;
+      background: var(--md-sys-color-primary);
+      transition: width 240ms ease;
+    }
+    /* Top bar utility buttons (Account & Help) */
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .top-util-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-lowest, #fff);
+      color: var(--md-sys-color-on-surface);
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .top-util-btn:hover {
+      background: var(--md-sys-color-surface-container-low, #f4f7f4);
+      border-color: var(--md-sys-color-primary);
+    }
+    .top-util-btn.is-authed {
+      border-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-primary);
+    }
+    /* Monthly calendar heatmap for Growth */
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-top: 10px;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .cal-cell {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 4px 2px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: #F4F5F2;
+      color: var(--md-sys-color-on-surface);
+      font: inherit;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease;
+    }
+    .cal-cell:hover { border-color: var(--md-sys-color-primary); }
+    .cal-cell.is-empty { background: transparent; cursor: default; pointer-events: none; }
+    .cal-cell.is-today { border: 2px solid #1A73E8; font-weight: 700; }
+    .cal-cell.is-selected { border-color: #1A73E8; box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.22); }
+    .cal-today-tag {
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #1A73E8;
+      line-height: 1;
+    }
+    .cal-lv-3 .cal-today-tag, .cal-lv-4 .cal-today-tag { color: #FFFFFF; }
+    .cal-lv-0 { background: #F1F3F4; color: #5F6368; }
+    .cal-lv-1 { background: #D2E3FC; color: #174EA6; }
+    .cal-lv-2 { background: #8AB4F8; color: #0B3A7D; }
+    .cal-lv-3 { background: #4285F4; color: #FFFFFF; }
+    .cal-lv-4 { background: #1A73E8; color: #FFFFFF; }
+    .cal-day-num { font-weight: 600; line-height: 1.1; }
+    .cal-day-pct { font-size: 0.6875rem; opacity: 0.88; margin-top: 2px; }
+    .cal-extra-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #137333;
+    }
+    .cal-lv-3 .cal-extra-dot, .cal-lv-4 .cal-extra-dot { background: #E6F4EA; }
+    /* 方案 1 · 晨光白瓷: 3-Column Google Workspace Desktop Layout */
+    .context-rail {
+      display: none;
+    }
+    @media (min-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 224px minmax(0, 1fr) 368px;
+        grid-template-rows: 64px 1fr;
+        grid-template-areas:
+          "rail topbar topbar"
+          "rail main context";
+      }
+      .nav-shell {
+        background: #F7F9FC !important;
+        border-inline-end: 1px solid #E3E8EF !important;
+        padding: 20px 14px !important;
+        align-items: stretch !important;
+      }
+      .nav-btn {
+        flex-direction: row !important;
+        justify-content: flex-start !important;
+        gap: 12px !important;
+        padding: 10px 14px !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+      }
+      .nav-btn[aria-selected="true"] {
+        background: #E8F0FE !important;
+        color: #1A73E8 !important;
+      }
+      .nav-btn[aria-selected="true"]::after { display: none; }
+      .nav-pill {
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .top-bar {
+        background: rgba(255, 255, 255, 0.94) !important;
+        border-block-end: 1px solid #E3E8EF !important;
+        padding-inline: 28px !important;
+      }
+      .main-area {
+        max-width: none !important;
+        padding: 24px 28px 48px !important;
+      }
+      .context-rail {
+        grid-area: context;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px 22px 40px;
+        background: #FAFBFE;
+        border-inline-start: 1px solid #E3E8EF;
+      }
+    }
+    .rail-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .rail-cal-cell {
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .praise-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .praise-kpi-box {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #F4F6FA;
+      border: 1px solid #E3E8EF;
+    }
+    .praise-kpi-num {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #1A73E8;
+      margin-top: 2px;
+    }
+    .cal-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-top: 10px;
+    }
+    .cal-swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      vertical-align: -2px;
+    }
+    /* Account & Help modal sizing */
+    dialog.wide-dialog {
+      max-width: min(560px, calc(100vw - 32px));
+      width: 100%;
+    }
+    .dialog-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link visually-hidden">跳至主要内容</a>
+  <div class="app-shell">
+    <!-- Compact Single-Row Top App Bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22c4-4 7-7.5 7-12a7 7 0 0 0-14 0c0 4.5 3 8 7 12Z"/>
+            <path d="M12 10v6"/>
+            <path d="M12 13l3-2.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">芽米 · 家长端</div>
+        </div>
+      </div>
+
+      <div class="top-bar-actions">
+        <button type="button" class="student-trigger" commandfor="student-menu" command="toggle-popover" aria-haspopup="menu">
+          <span class="student-avatar" id="active-student-avatar">禾</span>
+          <span id="active-student-label">小禾 · 四年级</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </button>
+        <button type="button" id="top-account-btn" class="top-util-btn" onclick="openAccountDialog()" aria-label="家长账号">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="top-account-label">家长账号</span>
+        </button>
+        <button type="button" id="top-help-btn" class="top-util-btn" onclick="openHelpDialog()" aria-label="设备使用帮助">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <path d="M12 17h.01"/>
+          </svg>
+          <span>帮助</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Native Top-Layer Student Switcher Popover -->
+    <div id="student-menu" popover="auto" role="menu" aria-label="切换孩子档案">
+      <div class="menu-heading">选择孩子档案</div>
+      <button type="button" class="menu-item" role="menuitemradio" aria-checked="true" data-stu="stu_he" onclick="selectStudent('stu_he')">
+        <span class="student-avatar">禾</span>
+        <span>小禾</span>
+        <span class="menu-item-meta">四年级 · 人教版</span>
+      </button>
+      <button type="button" class="menu-item" role="menuitemradio" aria-checked="false" data-stu="stu_le" onclick="selectStudent('stu_le')">
+        <span class="student-avatar" style="background: var(--md-sys-color-secondary);">乐</span>
+        <span>乐乐</span>
+        <span class="menu-item-meta">三年级 · 北师大版</span>
+      </button>
+      <hr class="divider" style="margin-block: 4px;" />
+      <button type="button" class="menu-item" onclick="syncActiveStudentToDevice()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+          <path d="M12 18h.01"/>
+        </svg>
+        <span>将当前孩子同步到 Mosaico</span>
+      </button>
+      <button type="button" class="menu-item" onclick="seedDemo()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+          <path d="M16 16h5v5"/>
+        </svg>
+        <span>刷新演示数据</span>
+      </button>
+    </div>
+
+    <!-- M3 Navigation Rail (Desktop) / Bottom Navigation Bar (Mobile) -->
+    <nav class="nav-shell" role="tablist" aria-label="主导航">
+      <button type="button" id="nav-tab-today" class="nav-btn" role="tab" aria-selected="true" data-tab="today" onclick="switchTab('today')">
+        <span class="nav-pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="4" rx="2"/>
+            <path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>
+            <path d="m9 16 2 2 4-4"/>
+          </svg>
+        </span>
+        <span>今日</span>
+      </button>
+      <button type="button" id="nav-tab-growth" class="nav-btn" role="tab" aria-selected="false" data-tab="growth" onclick="switchTab('growth')">
+        <span class="nav-pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 3v18h18"/>
+            <path d="m19 9-5 5-4-4-3 3"/>
+          </svg>
+        </span>
+        <span>成长</span>
+      </button>
+      <button type="button" id="nav-tab-skills" class="nav-btn" role="tab" aria-selected="false" data-tab="skills" onclick="switchTab('skills')">
+        <span class="nav-pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        <span>技能</span>
+      </button>
+      <button type="button" id="nav-tab-settings" class="nav-btn" role="tab" aria-selected="false" data-tab="settings" onclick="switchTab('settings')">
+        <span class="nav-pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 0 1 0 4h-.09c-.66 0-1.25.4-1.51 1Z"/>
+          </svg>
+        </span>
+        <span>设置</span>
+      </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-area">
+      <!-- TAB 1: TODAY (1. Homework -> 2. Todo -> 3. Preview/Review/Daily Tasks -> 4. Teacher Feedback) -->
+      <section id="tab-today" class="view-panel active" role="tabpanel" aria-labelledby="nav-tab-today">
+        <div class="section-head">
+          <h1 class="headline-sm">今日</h1>
+          <button type="button" class="btn btn-tonal btn-sm" onclick="loadToday()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+            </svg>
+            <span>刷新</span>
+          </button>
+        </div>
+
+        <div id="sync-banner" class="sync-strip" role="status" aria-live="polite">
+          <span class="sync-dot" aria-hidden="true"></span>
+          <span id="sync-text">正在同步今日作业…</span>
+        </div>
+
+        <!-- 1. 今日作业 -->
+        <div style="display: grid; gap: 12px;">
+          <h2 class="title-md">今日作业</h2>
+          <div id="assignments-list" class="card-grid card-grid-2"></div>
+          <details class="md-disclosure">
+            <summary>手动添加作业</summary>
+            <form style="display: grid; gap: 12px; padding-block-start: 10px;" onsubmit="addManualAssignment(event)">
+              <div class="card-grid card-grid-2">
+                <div class="field">
+                  <label class="field-label" for="man-subject">学科</label>
+                  <select id="man-subject" class="md-input">
+                    <option value="数学">数学</option>
+                    <option value="语文">语文</option>
+                    <option value="英语">英语</option>
+                    <option value="科学">科学</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="man-sub-mode">提交方式</label>
+                  <select id="man-sub-mode" class="md-input">
+                    <option value="paper_next_day">次日交纸质</option>
+                    <option value="dingtalk_online">钉钉家校本提交</option>
+                    <option value="none">无需提交</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-row">
+                <input id="man-content" class="md-input" type="text" required placeholder="例如：口算题卡第 18 页" />
+                <button type="submit" class="btn btn-filled btn-sm">添加</button>
+              </div>
+            </form>
+          </details>
+        </div>
+
+        <!-- 2. 待办 -->
+        <div id="action-section" style="display: none; gap: 12px;">
+          <h2 class="title-md">待办</h2>
+          <div id="action-list" class="card-grid card-grid-2"></div>
+        </div>
+
+        <!-- 3. 预习与复习（合并展示） -->
+        <article class="md-card md-card-tonal">
+          <div class="asg-header">
+            <h2 class="title-md">预习与复习</h2>
+            <div class="badge-row">
+              <span id="stage-review-badge" class="badge badge-neutral">复习 0 项</span>
+              <span id="stage-preview-badge" class="badge badge-neutral">预习 0 项</span>
+            </div>
+          </div>
+          <div class="card-grid card-grid-2" style="margin-top: 8px;">
+            <div>
+              <h3 class="body-sm" style="font-weight: 600; color: var(--md-sys-color-on-surface); margin-bottom: 6px;">复习巩固</h3>
+              <div id="today-review-list" style="display: grid; gap: 6px;"></div>
+            </div>
+            <div>
+              <h3 class="body-sm" style="font-weight: 600; color: var(--md-sys-color-on-surface); margin-bottom: 6px;">明日预习</h3>
+              <div id="today-preview-list" style="display: grid; gap: 6px;"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. 自定义任务（完整生命周期管理） -->
+        <article class="md-card">
+          <div class="asg-header" style="flex-wrap: wrap; gap: 8px;">
+            <h2 class="title-md">自定义任务</h2>
+            <div class="chip-group" role="group" aria-label="筛选自定义任务状态">
+              <button type="button" class="chip" aria-pressed="true" data-ct-filter="all" onclick="filterCustomTasks('all')">全部</button>
+              <button type="button" class="chip" aria-pressed="false" data-ct-filter="active" onclick="filterCustomTasks('active')">进行中</button>
+              <button type="button" class="chip" aria-pressed="false" data-ct-filter="paused" onclick="filterCustomTasks('paused')">已暂停</button>
+            </div>
+          </div>
+          <form class="input-row" style="margin-top: 8px;" onsubmit="createCustomTaskItem(event)">
+            <input id="custom-task-input" class="md-input" style="min-block-size: 40px;" type="text" required maxlength="120" placeholder="添加自定义任务（如：睡前阅读 20 分钟）" aria-label="自定义任务名称" />
+            <select id="custom-task-cadence" class="md-input" style="min-block-size: 40px; inline-size: auto;" aria-label="重复周期">
+              <option value="daily">每日重复</option>
+              <option value="weekdays">工作日</option>
+              <option value="once">仅今日</option>
+            </select>
+            <button type="submit" class="btn btn-filled btn-sm">新增</button>
+          </form>
+          <div id="custom-tasks-list" style="display: grid; gap: 8px; margin-top: 10px;"></div>
+        </article>
+
+        <!-- 5. 教师今日反馈 -->
+        <div class="md-card">
+          <h2 class="title-md">教师今日反馈</h2>
+          <div id="today-class-perf-list" style="display: grid; gap: 8px; margin-top: 6px;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: SKILL LIFECYCLE MANAGEMENT PANEL -->
+      <section id="tab-skills" class="view-panel" role="tabpanel" aria-labelledby="nav-tab-skills" hidden>
+        <div class="section-head">
+          <h1 class="headline-sm">技能</h1>
+          <button type="button" class="btn btn-tonal btn-sm" onclick="loadStudentSkills()">刷新</button>
+        </div>
+
+        <div id="skills-list" class="card-grid card-grid-2"></div>
+
+        <details class="md-disclosure">
+          <summary>语音听写快捷发起</summary>
+          <div style="display: grid; gap: 12px; padding-block-start: 10px;">
+            <form id="dict-natural-form" class="field" onsubmit="submitNaturalDictation(event)">
+              <label class="field-label" for="dict-utterance">听写指令</label>
+              <div class="input-row">
+                <input id="dict-utterance" class="md-input" type="text" required placeholder="例如：听写第3单元第4课组词" value="听写第3单元第4课组词" />
+                <button type="submit" class="btn btn-filled btn-sm">下发至芽米桌宠</button>
+              </div>
+            </form>
+            <div class="chip-group" aria-label="快捷示例">
+              <button type="button" class="chip" onclick="fillDictationExample('听写第3单元第4课组词')">四年级语文 · 第3单元第4课组词</button>
+              <button type="button" class="chip" onclick="fillDictationExample('听写英语Unit 3单词')">四年级英语 · Unit 3 单词</button>
+            </div>
+            <div id="dict-result-card" class="md-card md-card-tonal" style="display: none;">
+              <div class="badge-row">
+                <span id="dict-result-badge" class="badge badge-primary">已下发至芽米桌宠</span>
+                <span id="dict-result-count" class="badge badge-neutral"></span>
+              </div>
+              <h3 id="dict-result-title" class="title-md"></h3>
+              <p id="dict-result-spoken" class="body-sm" style="color: var(--md-sys-color-on-surface);"></p>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- TAB 2: GROWTH (1. 成长日历 -> 2. 教师表扬看板 -> 3. 教材学情与知识点 -> 4. 习惯养成统计 -> 5. 情绪晴雨表 -> 6. 学习记忆 & 语音对话) -->
+      <section id="tab-growth" class="view-panel" role="tabpanel" aria-labelledby="nav-tab-growth" hidden>
+        <div class="section-head">
+          <h2 class="headline-sm">成长</h2>
+          <button type="button" class="btn btn-tonal btn-sm" onclick="loadGrowthAnalytics()">刷新</button>
+        </div>
+
+        <!-- 1. 成长日历 -->
+        <article class="md-card md-card-elevated">
+          <div class="asg-header" style="flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <h3 class="title-md">成长日历</h3>
+                <span id="growth-today-label" class="badge badge-primary"></span>
+              </div>
+              <p id="growth-daily-summary" class="body-sm" style="margin-top: 4px;">正在加载本月学习记录…</p>
+            </div>
+            <div class="badge-row" style="align-items: center;">
+              <input id="growth-month-picker" type="month" class="md-input" style="min-block-size: 38px; padding-block: 4px; inline-size: auto;" aria-label="选择月份" onchange="loadGrowthAnalytics()" />
+              <button type="button" class="btn btn-outlined btn-sm" onclick="jumpToTodayMonth()">回到今天</button>
+              <span id="growth-completion-badge" class="badge badge-primary">今日作业 0%</span>
+              <span id="growth-extra-badge" class="badge badge-neutral">额外任务 0/0</span>
+            </div>
+          </div>
+
+          <div class="cal-weekdays" aria-hidden="true">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div id="growth-cal-grid" class="cal-grid" role="grid" aria-label="成长日历"></div>
+          <div id="growth-cal-detail" class="body-sm" style="margin-top: 10px; color: var(--md-sys-color-on-surface);">点击任意日期查看当天作业与额外任务完成情况</div>
+          <div class="cal-legend">
+            <span>完成度：</span>
+            <span><i class="cal-swatch cal-lv-0"></i> 无记录</span>
+            <span><i class="cal-swatch cal-lv-1"></i> &lt;50%</span>
+            <span><i class="cal-swatch cal-lv-2"></i> 50–79%</span>
+            <span><i class="cal-swatch cal-lv-3"></i> 80–99%</span>
+            <span><i class="cal-swatch cal-lv-4"></i> 100%</span>
+            <span>· 绿点表示有额外任务</span>
+          </div>
+          <div id="growth-extra-tasks-row" class="badge-row" style="margin-top: 8px;"></div>
+        </article>
+
+        <!-- 2. 教师表扬与课堂表现看板 -->
+        <article class="md-card md-card-elevated">
+          <div class="asg-header" style="flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 class="title-md">教师表扬与课堂表现看板</h3>
+              <p id="praise-board-sub" class="body-sm">自动汇总钉钉班级群点名表扬，也支持家长手动补录</p>
+            </div>
+            <span id="praise-month-badge" class="badge badge-primary">本月 0 次表扬</span>
+          </div>
+          <div id="praise-board-stats" class="praise-kpi-grid"></div>
+          <div id="praise-subject-chips" class="chip-group" role="group" aria-label="按学科筛选表扬" style="margin-top: 10px;"></div>
+          <div id="praise-board-list" style="display: grid; gap: 10px; margin-top: 10px;"></div>
+          <details class="md-disclosure" style="margin-top: 10px;">
+            <summary>+ 手动补录一条老师表扬</summary>
+            <form style="display: grid; gap: 10px; padding-block-start: 10px;" onsubmit="submitTeacherPraise(event)">
+              <div class="card-grid card-grid-2">
+                <div class="field">
+                  <label class="field-label" for="praise-subject">学科</label>
+                  <select id="praise-subject" class="md-input">
+                    <option value="数学">数学</option>
+                    <option value="语文">语文</option>
+                    <option value="英语">英语</option>
+                    <option value="科学">科学</option>
+                    <option value="综合">综合</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="praise-teacher">老师称呼</label>
+                  <input id="praise-teacher" class="md-input" type="text" required placeholder="例如：王老师" />
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label" for="praise-title">表扬主题</label>
+                <input id="praise-title" class="md-input" type="text" required placeholder="例如：主动上台讲题思路清晰" />
+              </div>
+              <div class="input-row">
+                <input id="praise-content" class="md-input" type="text" required placeholder="记录老师原话或课堂表现详情…" />
+                <button type="submit" class="btn btn-filled btn-sm">保存记录</button>
+              </div>
+            </form>
+          </details>
+        </article>
+
+        <!-- 3. 教材学情与知识点 -->
+        <article class="md-card md-card-elevated">
+          <div class="asg-header">
+            <div>
+              <h3 class="title-md">教材学情与知识点</h3>
+              <p id="growth-book-subtitle" class="body-sm">按当前年级与教材版本追踪单元掌握度</p>
+            </div>
+            <span id="growth-book-pct-badge" class="badge badge-primary">学期进度 0%</span>
+          </div>
+          <div id="growth-subject-chips" class="chip-group" role="group" aria-label="切换学科" style="margin-top: 8px;"></div>
+          <div id="growth-curriculum-units" class="card-grid card-grid-2" style="margin-top: 10px;"></div>
+          <div id="growth-method-cards" class="badge-row" style="margin-top: 10px;"></div>
+        </article>
+
+        <!-- 4. 习惯养成统计（自动聚合自定义任务与每日作业） -->
+        <article class="md-card">
+          <div class="asg-header">
+            <h3 class="title-md">习惯养成统计</h3>
+            <span id="habit-streak-badge" class="badge badge-primary">最高坚持 0 天</span>
+          </div>
+          <div id="habit-auto-stats" style="display: grid; gap: 10px; margin-top: 8px;"></div>
+        </article>
+
+        <!-- 5. 情绪晴雨表 -->
+        <article class="md-card">
+          <div class="asg-header">
+            <div>
+              <h3 class="title-md">情绪晴雨表</h3>
+              <p id="growth-emo-disclaimer" class="body-sm">日常亲子沟通参考，非医疗诊断</p>
+            </div>
+            <span id="growth-emo-risk-badge" class="badge badge-primary">情绪平稳</span>
+          </div>
+          <div id="growth-emo-counts" class="badge-row" style="margin-top: 8px;"></div>
+          <p id="growth-emo-tip" class="body-sm" style="margin-top: 8px; color: var(--md-sys-color-on-surface);"></p>
+        </article>
+
+        <!-- 6. 学习记忆 & 语音对话记录 -->
+        <article class="md-card">
+          <h3 class="title-md">学习记忆</h3>
+          <div id="memory-list" style="display: grid; gap: 10px;"></div>
+        </article>
+
+        <div class="md-card">
+          <div class="section-head" style="flex-wrap: wrap; gap: 10px;">
+            <h2 class="title-md">语音对话记录</h2>
+            <div class="badge-row" style="align-items: center;">
+              <input id="conv-date-filter" type="date" class="md-input" style="min-block-size: 36px; padding-block: 4px; inline-size: auto;" aria-label="按日期筛选对话" onchange="loadConversations()" oninput="loadConversations()" />
+              <button type="button" class="btn btn-outlined btn-sm" onclick="setConvDateOffset(0)">今天</button>
+              <button type="button" class="btn btn-outlined btn-sm" onclick="setConvDateOffset(-1)">昨天</button>
+              <button type="button" class="btn btn-outlined btn-sm" onclick="resetConvDateFilter()">全部</button>
+              <button type="button" class="btn btn-text btn-sm" style="color: var(--md-sys-color-error);" onclick="confirmClearConversations()">清空</button>
+            </div>
+          </div>
+          <div id="conversation-list" style="display: grid; gap: 10px;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SETTINGS (Student Profile, Device Pairing, DingTalk Integration, Pet House) -->
+      <section id="tab-settings" class="view-panel" role="tabpanel" aria-labelledby="nav-tab-settings" hidden>
+        <div class="section-head">
+          <h2 class="headline-sm">设置</h2>
+        </div>
+
+        <!-- Student Profile Editor & Sensor Consent -->
+        <div class="md-card">
+          <h2 class="title-md">学生档案</h2>
+
+          <form id="student-profile-form" style="display: grid; gap: 14px;" onsubmit="saveStudentProfile(event)">
+            <div class="card-grid card-grid-2">
+              <div class="field">
+                <label class="field-label" for="set-name">孩子姓名 / 昵称</label>
+                <input id="set-name" class="md-input" type="text" required maxlength="24" value="小禾" />
+              </div>
+              <div class="field">
+                <label class="field-label" for="set-grade">年级</label>
+                <select id="set-grade" class="md-input" onchange="loadCatalogForGrade(Number(this.value))">
+                  <option value="1">一年级</option>
+                  <option value="2">二年级</option>
+                  <option value="3">三年级</option>
+                  <option value="4" selected>四年级</option>
+                  <option value="5">五年级</option>
+                  <option value="6">六年级</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-label">各科教材版本</div>
+              <div id="subject-textbooks-grid" class="card-grid card-grid-2">
+                <div class="field">
+                  <label class="field-label" for="tb-chinese">语文</label>
+                  <select id="tb-chinese" class="md-input"></select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="tb-math">数学</label>
+                  <select id="tb-math" class="md-input"></select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="tb-english">英语</label>
+                  <select id="tb-english" class="md-input"></select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="tb-science">科学</label>
+                  <select id="tb-science" class="md-input"></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="title-md" style="font-size: 0.9375rem;">声纹识别</div>
+                <div class="body-sm">自动区分家庭中的不同孩子</div>
+              </div>
+              <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input id="set-voiceprint" type="checkbox" style="inline-size: 20px; block-size: 20px; accent-color: var(--md-sys-color-primary);" />
+                <span class="body-sm">开启</span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="title-md" style="font-size: 0.9375rem;">摄像头授权</div>
+                <div class="body-sm">可随时撤回并清空历史照片</div>
+              </div>
+              <div style="display: inline-flex; align-items: center; gap: 10px;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input id="set-camera" type="checkbox" style="inline-size: 20px; block-size: 20px; accent-color: var(--md-sys-color-primary);" />
+                  <span class="body-sm">开启</span>
+                </label>
+                <button type="button" class="btn btn-danger-tonal btn-sm" onclick="confirmRevokeCamera()">清空照片</button>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-filled">保存档案</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Mosaico Device Pairing Card (Account login moved to top-right dialog) -->
+        <div class="md-card">
+          <div class="asg-header">
+            <h2 class="title-md">Mosaico 设备绑定</h2>
+            <button type="button" class="btn btn-text btn-sm" onclick="openAccountDialog()">切换家长账号</button>
+          </div>
+          <div class="input-row">
+            <input id="pairing-code-input" name="pairing_code" class="md-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="输入 Mosaico 屏幕 6 位配对码（如 482910）" aria-label="6 位配对码" />
+            <button type="button" class="btn btn-filled btn-sm" onclick="claimDeviceByCode()">绑定设备</button>
+          </div>
+          <div id="bound-devices-list" class="badge-row" style="margin-top: 8px;"></div>
+        </div>
+
+        <!-- DingTalk Robot & Family Webhook Configuration -->
+        <div class="md-card">
+          <h2 class="title-md">钉钉集成配置</h2>
+          <form style="display: grid; gap: 12px;" onsubmit="saveFamilyWebhook(event)">
+            <div class="card-grid card-grid-2">
+              <div class="field">
+                <label class="field-label" for="set-dt-appid">钉钉机器人 AppId / AppKey</label>
+                <input id="set-dt-appid" class="md-input" type="text" autocomplete="off" spellcheck="false" placeholder="如：dingxxxxxxxxxxxx" />
+              </div>
+              <div class="field">
+                <label class="field-label" for="set-dt-secret">钉钉机器人 AppSecret</label>
+                <input id="set-dt-secret" class="md-input" type="password" autocomplete="new-password" placeholder="输入 AppSecret（留空则保持不变）" />
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="set-dt-group">班级群 ID（OpenConversationId）</label>
+              <input id="set-dt-group" class="md-input" type="text" autocomplete="off" spellcheck="false" placeholder="用于拉取班级群作业与老师反馈，如：cidxxxxxxxx==" />
+            </div>
+            <div class="field">
+              <label class="field-label" for="set-webhook">家庭私群提醒 Webhook</label>
+              <div class="input-row">
+                <input id="set-webhook" class="md-input" type="url" placeholder="https://oapi.dingtalk.com/robot/send?access_token=..." />
+                <button type="submit" class="btn btn-filled btn-sm">保存配置</button>
+                <button type="button" class="btn btn-tonal btn-sm" onclick="triggerDwsSync()">立即同步钉钉</button>
+                <button type="button" class="btn btn-outlined btn-sm" onclick="testFamilyWebhook()">测试提醒</button>
+              </div>
+            </div>
+          </form>
+          <div id="webhook-alerts-list" style="display: grid; gap: 6px;"></div>
+        </div>
+
+        <!-- Pet Adoption, 1:1 Forest Cream Polaroid Pet House & Lifecycle Controls -->
+        <div class="md-card">
+          <div class="asg-header">
+            <h2 class="title-md">芽米宠物小屋</h2>
+            <span id="pet-status-badge" class="badge badge-primary">宠粮币 45</span>
+          </div>
+
+          <div class="pet-polaroid-layout">
+            <!-- Left: 1:1 480x480 Forest Cream Polaroid Pet House Screen -->
+            <div class="pet-polaroid-screen" id="pp-screen" aria-label="芽米宠物小屋拍立得卡片">
+              <div class="pp-top-card">
+                <div class="pp-row1">
+                  <div class="pp-pet-title">
+                    <span id="pp-title-text">金毛 · 暖暖</span>
+                    <span class="pp-hab-pill" id="pp-hab-text">Lv.2 原木小筑</span>
+                  </div>
+                  <span class="pp-coin-pill" id="pp-coin-text">65 币</span>
+                </div>
+                <div class="pp-bars">
+                  <div class="pp-bar-box">
+                    <span id="pp-diet-label">饮食</span>
+                    <span class="pp-stars diet" id="pp-diet-stars" aria-label="饮食星级">★★★★★</span>
+                  </div>
+                  <div class="pp-bar-box">
+                    <span id="pp-mood-label">开心</span>
+                    <span class="pp-stars mood" id="pp-mood-stars" aria-label="开心星级">★★★★★</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pp-stage state-happy_idle" id="pp-stage">
+                <img class="pp-stage-img" id="pp-stage-img" src="/guardian/assets/pets/stage_sunny_room.png" alt="萌宠居住空间" />
+                <div class="pp-sprite-wrap" id="pp-sprite-wrap">
+                  <div class="pp-sprite-shadow"></div>
+                  <div class="pp-sprite-actor" id="pp-sprite-actor"></div>
+                </div>
+                <div class="pp-mood-pill" id="pp-mood-pill">扑闪着小翅膀在屋里巡游探险</div>
+                <img class="pp-heart-fx" id="pp-heart-1" src="/guardian/assets/fluent3d/heart.png" alt="" />
+                <img class="pp-heart-fx h2" id="pp-heart-2" src="/guardian/assets/fluent3d/heart.png" alt="" style="display: none;" />
+                <img class="pp-heart-fx h3" id="pp-heart-3" src="/guardian/assets/fluent3d/heart.png" alt="" style="display: none;" />
+              </div>
+
+              <div class="pp-food-bar" id="pp-food-bar">
+                <!-- Populated dynamically with the species' 3 food capsules or the 100-coin recall capsule -->
+              </div>
+            </div>
+
+            <!-- Right: Breed Switcher, Habitat Upgrade, Petting & 7-Day Time Decay Simulator -->
+            <div style="display: grid; gap: 14px;">
+              <form style="display: grid; gap: 12px;" onsubmit="saveGuardianPet(event)">
+                <div class="field">
+                  <label class="field-label" for="set-pet-breed">领养或切换动态伙伴（9 只 Hatch-Pet 4×4 逐帧动画）</label>
+                  <select id="set-pet-breed" class="md-input" onchange="previewSelectedBreed()">
+                    <optgroup label="奇幻星灵（最爱能量星果10币 / 星云大餐20币）">
+                      <option value="nebula_dragon" selected>星云小龙 · 星宝（薄荷星辉幼龙）</option>
+                      <option value="cloud_puff">棉花糖云 · 绵绵（彩虹软云小精灵）</option>
+                      <option value="mochi_fox">麻薯灵狐 · 莓莓（草莓大福小狐狸）</option>
+                    </optgroup>
+                    <optgroup label="萌趣伙伴（最爱鲜脆小食10币 / 豪华大餐20币）">
+                      <option value="capybara">泡芙水豚 · 佛系橘（头顶橘子卡皮巴拉）</option>
+                      <option value="astro_penguin">宇航企鹅 · 啵啵（太空头盔小企鹅）</option>
+                      <option value="chibi_rex">呆萌恐龙 · 咔咔（薄荷小霸王龙）</option>
+                    </optgroup>
+                    <optgroup label="星际潮玩（最爱电池糖10币 / 超充能量20币）">
+                      <option value="volt_robo">雷电机甲 · 闪闪（像素笑脸小机甲）</option>
+                      <option value="aurora_dragon">极光星龙 · 幻幻（冰晶极光典藏龙）</option>
+                      <option value="sakura_fox">樱花灵狐 · 桃桃（樱花粉典藏灵狐）</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="set-pet-name">宠物专属昵称</label>
+                  <div class="input-row">
+                    <input id="set-pet-name" class="md-input" type="text" maxlength="16" placeholder="例如：星宝、佛系橘、闪闪" />
+                    <button type="submit" class="btn btn-filled btn-sm">切换并同步到 Mosaico</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="md-card md-card-tonal" style="padding: 14px; gap: 10px;">
+                <div class="title-md" style="font-size: 0.875rem;">互动陪伴与小窝升级</div>
+                <div class="badge-row">
+                  <button type="button" class="btn btn-tonal btn-sm" onclick="guardianPlayWithPet()">摸摸陪伴 (+12%开心)</button>
+                  <button type="button" class="btn btn-outlined btn-sm" id="btn-upgrade-habitat" onclick="guardianUpgradeHabitat()">升级小窝 (40币)</button>
+                </div>
+                <div id="pet-detail-badges" class="badge-row"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Right Context Panel (方案 1 · 晨光白瓷: Live Growth Calendar + Teacher Praise Board) -->
+    <aside class="context-rail" aria-label="成长日历与教师表扬概览">
+      <div class="md-card" style="padding: 16px;">
+        <div class="asg-header">
+          <h3 class="title-md" style="font-size: 0.9375rem;">成长日历</h3>
+          <span id="rail-today-label" class="badge badge-primary"></span>
+        </div>
+        <div class="cal-weekdays" aria-hidden="true" style="margin-top: 8px;">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div id="rail-cal-grid" class="rail-cal-grid"></div>
+      </div>
+
+      <div class="md-card" style="padding: 16px;">
+        <div class="asg-header">
+          <h3 class="title-md" style="font-size: 0.9375rem;">教师表扬看板</h3>
+          <span id="rail-praise-badge" class="badge badge-primary">0 次</span>
+        </div>
+        <div id="rail-praise-list" style="display: grid; gap: 8px; margin-top: 8px;"></div>
+        <button type="button" class="btn btn-text btn-sm" style="margin-top: 8px; justify-self: start;" onclick="switchTab('growth')">查看完整成长档案 →</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Native Modal <dialog> for Guardian Account Login / Register -->
+  <dialog id="account-dialog" class="wide-dialog" aria-labelledby="account-dialog-title">
+    <div class="dialog-head">
+      <h2 id="account-dialog-title" class="dialog-title" style="margin: 0;">家长账号</h2>
+      <button type="button" class="btn btn-text btn-sm" onclick="document.getElementById('account-dialog').close()">关闭</button>
+    </div>
+    <p id="auth-status-text" class="body-sm" style="margin-bottom: 12px;">当前为本地演示模式，登录或注册后可同步家庭数据与专属设备。</p>
+    <div id="auth-forms-box" style="display: grid; gap: 12px;">
+      <div class="field">
+        <label class="field-label" for="auth-account">账号（手机号或邮箱）</label>
+        <input id="auth-account" name="account" class="md-input" type="text" autocomplete="username" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="如：mom@example.com" />
+      </div>
+      <div class="field">
+        <label class="field-label" for="auth-password">密码（至少 6 位）</label>
+        <input id="auth-password" name="password" class="md-input" type="password" autocomplete="current-password" placeholder="输入密码" />
+      </div>
+      <div class="dialog-actions" style="justify-content: space-between;">
+        <button id="auth-logout-btn" type="button" class="btn btn-outlined btn-sm" style="display:none;" onclick="logoutGuardian()">退出登录</button>
+        <div style="display: flex; gap: 8px; margin-left: auto;">
+          <button type="button" class="btn btn-tonal btn-sm" onclick="registerGuardianWeb()">注册账号</button>
+          <button type="button" class="btn btn-filled btn-sm" onclick="loginGuardianWeb()">登录</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Native Modal <dialog> for Mosaico Hardware Operation Guide -->
+  <dialog id="help-dialog" class="wide-dialog" aria-labelledby="help-dialog-title">
+    <div class="dialog-head">
+      <h2 id="help-dialog-title" class="dialog-title" style="margin: 0;">Mosaico 设备使用说明</h2>
+      <button type="button" class="btn btn-text btn-sm" onclick="document.getElementById('help-dialog').close()">关闭</button>
+    </div>
+    <div style="display: grid; gap: 14px;">
+      <div style="display: grid; gap: 6px;">
+        <div class="title-md" style="font-size: 0.9rem;">语音与双按键操作</div>
+        <p class="body-sm"><b>语音唤醒 / 按键说话</b>：直接喊「Hi, 乐鑫」，或长按右键（≥0.35 秒）说话，松开即发送。</p>
+        <p class="body-sm"><b>长按左键（≥0.45 秒）</b>：一键进入或退出《芽米宠物小屋》。</p>
+        <p class="body-sm"><b>作业陪伴确认</b>：孩子完成作业后直接对芽米说「数学作业写完了」，芽米会语音复核并同步到家长端。</p>
+      </div>
+      <div style="display: grid; gap: 6px;">
+        <div class="title-md" style="font-size: 0.9rem;">页面短按按键</div>
+        <p class="body-sm"><b>学习主页</b>：短按左键进入《芽米宠物小屋》；短按右键查看今日作业。</p>
+        <p class="body-sm"><b>今日作业页</b>：短按左键切换下一项；短按右键开始专注陪伴。</p>
+        <p class="body-sm"><b>宠物小屋</b>：短按左键切换底部 3 种食物；短按右键投喂并同步扣币；长按左键返回主页。</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Native Modal <dialog> for Destructive Confirmations (No role="dialog" / aria-modal) -->
+  <dialog id="confirm-dialog" aria-labelledby="confirm-dialog-title">
+    <h2 id="confirm-dialog-title" class="dialog-title">确认操作</h2>
+    <p id="confirm-dialog-body" class="dialog-body"></p>
+    <form method="dialog" class="dialog-actions">
+      <button type="submit" value="cancel" class="btn btn-text" autofocus>取消</button>
+      <button type="submit" value="confirm" id="confirm-dialog-ok" class="btn btn-danger-filled">确认删除</button>
+    </form>
+  </dialog>
+
+  <!-- Non-blocking M3 Snackbar -->
+  <div id="snackbar" class="snackbar" role="status" aria-live="polite"></div>
+
+  <!-- Conditional Modern Web Polyfills (Only loaded when native support is missing) -->
+  <script type="module">
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      import('https://esm.run/invokers-polyfill');
+    }
+    if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
+      import('https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js');
+    }
+    if (!CSS.supports('container-type', 'scroll-state')) {
+      const bar = document.querySelector('.top-bar');
+      let lastY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const y = Math.max(0, Math.min(window.scrollY, document.documentElement.scrollHeight - window.innerHeight));
+        if (y === lastY) return;
+        bar?.classList.toggle('is-hidden', y > lastY && y > bar.offsetHeight);
+        lastY = y;
+      }, { passive: true });
+    }
+  </script>
+
+  <script>
+    const FAMILY_ID = 'fam_a';
+    const STUDENTS = {
+      stu_he: { name: '小禾', avatar: '禾', meta: '四年级', textbook: '人教版' },
+      stu_le: { name: '乐乐', avatar: '乐', meta: '三年级', textbook: '北师大版' },
+    };
+
+    let currentStudent = 'stu_he';
+    let currentGrowthCategory = '';
+    let pendingConfirmAction = null;
+    let snackbarTimer = null;
+
+    function showSnackbar(message) {
+      const el = document.getElementById('snackbar');
+      el.textContent = message;
+      el.classList.add('is-visible');
+      clearTimeout(snackbarTimer);
+      snackbarTimer = setTimeout(() => el.classList.remove('is-visible'), 3400);
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function api(path, opts = {}) {
+      const jwt = localStorage.getItem('yami_jwt') || '';
+      const authHeaders = jwt
+        ? { 'Authorization': `Bearer ${jwt}` }
+        : { 'X-Family-Id': FAMILY_ID };
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          ...authHeaders,
+          ...(opts.headers || {}),
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
+        throw new Error(err.detail || `HTTP ${res.status}`);
+      }
+      return res.json();
+    }
+
+    function openAccountDialog() {
+      refreshAuthStatus();
+      const dlg = document.getElementById('account-dialog');
+      if (dlg && typeof dlg.showModal === 'function') dlg.showModal();
+    }
+
+    function openHelpDialog() {
+      const dlg = document.getElementById('help-dialog');
+      if (dlg && typeof dlg.showModal === 'function') dlg.showModal();
+    }
+
+    async function refreshAuthStatus() {
+      const jwt = localStorage.getItem('yami_jwt') || '';
+      const statusEl = document.getElementById('auth-status-text');
+      const logoutBtn = document.getElementById('auth-logout-btn');
+      const devList = document.getElementById('bound-devices-list');
+      const topBtn = document.getElementById('top-account-btn');
+      const topLbl = document.getElementById('top-account-label');
+      if (!jwt) {
+        if (statusEl) statusEl.textContent = '当前为本地演示模式，登录或注册后可绑定专属 Mosaico 设备。';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (devList) devList.innerHTML = '';
+        if (topBtn) topBtn.classList.remove('is-authed');
+        if (topLbl) topLbl.textContent = '家长账号';
+        return;
+      }
+      try {
+        const me = await api('/v1/auth/me');
+        if (statusEl) statusEl.textContent = `已登录：${me.user.account}（${me.family.name}）`;
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        if (topBtn) topBtn.classList.add('is-authed');
+        if (topLbl) topLbl.textContent = me.user.account.split('@')[0];
+        if (devList) {
+          devList.innerHTML = (me.devices || []).length
+            ? me.devices.map(d => `
+                <span class="badge badge-primary" style="display:inline-flex;align-items:center;gap:6px;">
+                  Mosaico ${escapeHtml(d.hardware_uid)}
+                  <button type="button" class="btn btn-text btn-sm" style="padding:0 4px;" onclick="revokeBoundDevice('${escapeHtml(d.id)}')">解绑</button>
+                </span>`).join('')
+            : '<span class="body-sm">尚未绑定设备，输入屏幕上的 6 位配对码即可绑定</span>';
+        }
+      } catch (_) {
+        localStorage.removeItem('yami_jwt');
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (topBtn) topBtn.classList.remove('is-authed');
+        if (topLbl) topLbl.textContent = '家长账号';
+      }
+    }
+
+    async function loginGuardianWeb() {
+      const account = (document.getElementById('auth-account')?.value || '').trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!account || !password) return showSnackbar('请填写账号和密码');
+      try {
+        const res = await fetch('/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+        localStorage.setItem('yami_jwt', data.access_token);
+        document.getElementById('account-dialog')?.close();
+        showSnackbar(`欢迎回来，${data.family.name}`);
+        await refreshAuthStatus();
+        await loadStudents();
+        await loadToday();
+      } catch (err) {
+        showSnackbar(`登录失败：${err.message}`);
+      }
+    }
+
+    async function registerGuardianWeb() {
+      const account = (document.getElementById('auth-account')?.value || '').trim();
+      const password = document.getElementById('auth-password')?.value || '';
+      if (!account || password.length < 6) return showSnackbar('账号至少 3 位，密码至少 6 位');
+      try {
+        const res = await fetch('/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account, password, family_name: `${account.split('@')[0]}家庭` }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+        localStorage.setItem('yami_jwt', data.access_token);
+        document.getElementById('account-dialog')?.close();
+        showSnackbar(`注册成功，已创建家庭「${data.family.name}」`);
+        await refreshAuthStatus();
+        await loadStudents();
+        await loadToday();
+      } catch (err) {
+        showSnackbar(`注册失败：${err.message}`);
+      }
+    }
+
+    async function logoutGuardian() {
+      localStorage.removeItem('yami_jwt');
+      showSnackbar('已退出登录，切回本地演示模式');
+      await refreshAuthStatus();
+      await loadStudents();
+      await loadToday();
+    }
+
+    async function claimDeviceByCode() {
+      const code = (document.getElementById('pairing-code-input')?.value || '').trim();
+      if (code.length < 4) return showSnackbar('请输入 Mosaico 屏幕上的 6 位配对码');
+      try {
+        const d = await api('/v1/auth/devices/claim', {
+          method: 'POST',
+          body: JSON.stringify({ pairing_code: code }),
+        });
+        document.getElementById('pairing-code-input').value = '';
+        showSnackbar(`设备 ${d.hardware_uid} 已成功绑定到当前家庭`);
+        await refreshAuthStatus();
+      } catch (err) {
+        showSnackbar(`绑定失败：${err.message}`);
+      }
+    }
+
+    async function revokeBoundDevice(deviceId) {
+      try {
+        await api(`/v1/auth/devices/${deviceId}/revoke`, { method: 'POST' });
+        showSnackbar('已解绑该 Mosaico 设备');
+        await refreshAuthStatus();
+      } catch (err) {
+        showSnackbar(`解绑失败：${err.message}`);
+      }
+    }
+
+    // Native <dialog> confirmation helper
+    const confirmDialog = document.getElementById('confirm-dialog');
+    confirmDialog.addEventListener('close', async () => {
+      const choice = confirmDialog.returnValue;
+      confirmDialog.returnValue = ''; // Reset to prevent stale value leak
+      const action = pendingConfirmAction;
+      pendingConfirmAction = null;
+      if (choice === 'confirm' && typeof action === 'function') {
+        try {
+          await action();
+        } catch (err) {
+          showSnackbar(`操作失败：${err.message}`);
+        }
+      }
+    });
+
+    function openConfirmDialog({ title, body, okLabel = '确认', onConfirm }) {
+      document.getElementById('confirm-dialog-title').textContent = title;
+      document.getElementById('confirm-dialog-body').textContent = body;
+      document.getElementById('confirm-dialog-ok').textContent = okLabel;
+      pendingConfirmAction = onConfirm;
+      confirmDialog.showModal();
+    }
+
+    let cachedCurriculum = [];
+    let activeCurriculumSubject = 'math';
+
+    function switchTab(tab) {
+      document.querySelectorAll('.nav-btn').forEach((btn) => {
+        const isSel = btn.dataset.tab === tab;
+        btn.setAttribute('aria-selected', isSel ? 'true' : 'false');
+        if (isSel && typeof btn.scrollIntoView === 'function') {
+          try { btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (_) {}
+        }
+      });
+      document.querySelectorAll('.view-panel').forEach((panel) => {
+        const isActive = panel.id === `tab-${tab}`;
+        panel.classList.toggle('active', isActive);
+        panel.hidden = !isActive;
+      });
+      if (tab === 'today') loadToday();
+      if (tab === 'growth') { loadGrowthAnalytics(); loadGrowth(); loadMemories(); loadConversations(); }
+      if (tab === 'skills') { loadStudentSkills(); }
+      if (tab === 'settings') { refreshAuthStatus(); loadWebhookSettings(); loadGuardianPet(); }
+    }
+
+    function renderCurriculumSubject(subKey) {
+      activeCurriculumSubject = subKey;
+      const sub = cachedCurriculum.find(s => s.subject_key === subKey) || cachedCurriculum[0];
+      const chipsBox = document.getElementById('growth-subject-chips');
+      if (chipsBox) {
+        chipsBox.innerHTML = cachedCurriculum.map(s => `
+          <button type="button" class="chip" aria-pressed="${s.subject_key === (sub && sub.subject_key) ? 'true' : 'false'}"
+            onclick="renderCurriculumSubject('${escapeHtml(s.subject_key)}')">
+            ${escapeHtml(s.subject_cn)} · ${s.progress_pct}%
+          </button>
+        `).join('');
+      }
+      if (!sub) return;
+      const subTitle = document.getElementById('growth-book-subtitle');
+      const pctBadge = document.getElementById('growth-book-pct-badge');
+      const unitBox = document.getElementById('growth-curriculum-units');
+      if (subTitle) subTitle.textContent = `${sub.book_title}（${sub.series} · 共 ${sub.total_units} 个单元）`;
+      if (pctBadge) pctBadge.textContent = `已掌握 ${sub.mastered_units}/${sub.total_units} 单元 (${sub.progress_pct}%)`;
+      const stStyle = {
+        mastered: 'background:#1F6B4B;color:#FFFFFF;',
+        in_progress: 'background:#FEF6E4;color:#B54708;',
+        not_started: 'background:#F1EFEA;color:#5F6B64;',
+      };
+      if (unitBox) {
+        unitBox.innerHTML = (sub.units || []).length
+          ? sub.units.map(u => `
+              <article class="md-card md-card-tonal" style="padding:12px;">
+                <div class="asg-header">
+                  <strong style="font-size:0.9rem;">第 ${u.unit_index} 单元 · ${escapeHtml(u.title)}</strong>
+                  <span class="badge" style="${stStyle[u.status] || ''}">${escapeHtml(u.status_cn)}</span>
+                </div>
+                ${(u.lessons || []).length ? `<div class="body-sm" style="margin-top:4px;">${escapeHtml(u.lessons.slice(0, 4).join(' / '))}</div>` : ''}
+              </article>
+            `).join('')
+          : '<div class="body-sm">该年级此学科暂无目录数据</div>';
+      }
+    }
+
+    let cachedCalendarDays = [];
+    let selectedCalDate = '';
+
+    function getTodayInfo() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return {
+        year: y,
+        monthNum: now.getMonth() + 1,
+        dayNum: now.getDate(),
+        monthStr: `${y}-${m}`,
+        iso: `${y}-${m}-${d}`,
+        label: `今天 ${y}年${now.getMonth() + 1}月${now.getDate()}日`,
+      };
+    }
+
+    function buildClientMonthCalendar(monthStr) {
+      const today = getTodayInfo();
+      const target = /^\d{4}-\d{2}$/.test(monthStr || '') ? monthStr : today.monthStr;
+      const [y, m] = target.split('-').map(Number);
+      const firstWeekday = new Date(y, m - 1, 1).getDay();
+      const daysInMonth = new Date(y, m, 0).getDate();
+      const days = [];
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        days.push({
+          date: ds,
+          day: d,
+          homework_done: 0,
+          homework_total: 0,
+          homework_pct: 0,
+          extra_done: 0,
+          extra_total: 0,
+          extra_completed: false,
+          level: 0,
+        });
+      }
+      return { month: target, first_weekday: firstWeekday, days };
+    }
+
+    function jumpToTodayMonth() {
+      const today = getTodayInfo();
+      const picker = document.getElementById('growth-month-picker');
+      if (picker) picker.value = today.monthStr;
+      selectedCalDate = today.iso;
+      loadGrowthAnalytics();
+    }
+
+    function selectCalendarDay(dateStr) {
+      selectedCalDate = dateStr;
+      const today = getTodayInfo();
+      document.querySelectorAll('#growth-cal-grid .cal-cell').forEach((cell) => {
+        cell.classList.toggle('is-selected', cell.dataset.date === dateStr);
+      });
+      const dayObj = cachedCalendarDays.find(x => x.date === dateStr);
+      const detailEl = document.getElementById('growth-cal-detail');
+      if (!detailEl || !dayObj) return;
+      const isTodayTag = dayObj.date === today.iso ? '（今天）' : '';
+      const hwText = dayObj.homework_total > 0
+        ? `作业 ${dayObj.homework_done}/${dayObj.homework_total}（${dayObj.homework_pct}%）`
+        : '当日无作业记录';
+      const exText = dayObj.extra_total > 0
+        ? ` · 额外任务 ${dayObj.extra_done}/${dayObj.extra_total}${dayObj.extra_completed ? '（已完成）' : '（进行中）'}`
+        : '';
+      detailEl.innerHTML = `${escapeHtml(dayObj.date)}${isTodayTag}：${escapeHtml(hwText)}${escapeHtml(exText)} <button type="button" class="btn btn-text btn-sm" style="padding:0 6px;vertical-align:baseline;" onclick="filterConversationsByDate('${escapeHtml(dayObj.date)}')">查看当天对话 →</button>`;
+    }
+
+    function filterConversationsByDate(dateStr) {
+      const inp = document.getElementById('conv-date-filter');
+      if (inp) inp.value = dateStr;
+      loadConversations();
+      document.getElementById('conversation-list')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function renderMonthlyCalendar(cal) {
+      const today = getTodayInfo();
+      const todayLbl = document.getElementById('growth-today-label');
+      if (todayLbl) todayLbl.textContent = today.label;
+      const railTodayLbl = document.getElementById('rail-today-label');
+      if (railTodayLbl) railTodayLbl.textContent = `${today.monthNum}月${today.dayNum}日`;
+      const grid = document.getElementById('growth-cal-grid');
+      const railGrid = document.getElementById('rail-cal-grid');
+      const picker = document.getElementById('growth-month-picker');
+      if (!cal) return;
+      if (picker && cal.month && picker.value !== cal.month) {
+        picker.value = cal.month;
+      }
+      cachedCalendarDays = cal.days || [];
+      const padCount = Math.max(0, Math.min(6, Number(cal.first_weekday || 0)));
+      const cells = [];
+      const railCells = [];
+      for (let i = 0; i < padCount; i++) {
+        cells.push('<div class="cal-cell is-empty" aria-hidden="true"></div>');
+        railCells.push('<div class="rail-cal-cell"></div>');
+      }
+      for (const d of cachedCalendarDays) {
+        const lv = Math.max(0, Math.min(4, Number(d.level || 0)));
+        const isToday = d.date === today.iso;
+        const dot = d.extra_total > 0 ? '<span class="cal-extra-dot" title="有额外任务"></span>' : '';
+        const todayTag = isToday ? '<span class="cal-today-tag">今</span>' : '';
+        const pctLabel = d.homework_total > 0 ? `${d.homework_pct}%` : '·';
+        cells.push(`
+          <button type="button" class="cal-cell cal-lv-${lv} ${isToday ? 'is-today' : ''} ${selectedCalDate === d.date ? 'is-selected' : ''}"
+            data-date="${escapeHtml(d.date)}" onclick="selectCalendarDay('${escapeHtml(d.date)}')"
+            title="${escapeHtml(d.date)} 作业 ${d.homework_done}/${d.homework_total}">
+            ${todayTag}${dot}
+            <span class="cal-day-num">${d.day}</span>
+            <span class="cal-day-pct">${pctLabel}</span>
+          </button>
+        `);
+        railCells.push(`
+          <div class="rail-cal-cell cal-lv-${lv}" style="${isToday ? 'outline:2px solid #1A73E8;outline-offset:-2px;' : ''}"
+            title="${escapeHtml(d.date)} 作业 ${d.homework_done}/${d.homework_total}">
+            ${isToday ? `${d.day}今` : d.day}
+          </div>
+        `);
+      }
+      if (grid) grid.innerHTML = cells.join('');
+      if (railGrid) railGrid.innerHTML = railCells.join('');
+      const activeDay = cachedCalendarDays.find(x => x.date === selectedCalDate)
+        || cachedCalendarDays.find(x => x.date === today.iso)
+        || [...cachedCalendarDays].reverse().find(x => x.homework_total > 0 || x.extra_total > 0);
+      if (activeDay) {
+        selectCalendarDay(activeDay.date);
+      }
+    }
+
+    let cachedPraiseBoard = null;
+    let activePraiseSubject = '全部';
+
+    function filterPraiseSubject(subj) {
+      activePraiseSubject = subj;
+      if (cachedPraiseBoard) renderTeacherPraiseBoard(cachedPraiseBoard);
+    }
+
+    function renderTeacherPraiseBoard(board) {
+      cachedPraiseBoard = board || { total_count: 0, month_count: 0, subject_counts: [], top_subject: '暂无', items: [] };
+      const b = cachedPraiseBoard;
+      const monthBadge = document.getElementById('praise-month-badge');
+      const statsEl = document.getElementById('praise-board-stats');
+      const chipsEl = document.getElementById('praise-subject-chips');
+      const listEl = document.getElementById('praise-board-list');
+      const railBadge = document.getElementById('rail-praise-badge');
+      const railList = document.getElementById('rail-praise-list');
+
+      if (monthBadge) monthBadge.textContent = `本月 ${b.month_count || 0} 次表扬`;
+      if (railBadge) railBadge.textContent = `本月 ${b.month_count || 0} 次`;
+      if (statsEl) {
+        statsEl.innerHTML = `
+          <div class="praise-kpi-box"><div class="body-sm">累计表扬</div><div class="praise-kpi-num">${b.total_count || 0} 次</div></div>
+          <div class="praise-kpi-box"><div class="body-sm">本月表扬</div><div class="praise-kpi-num">${b.month_count || 0} 次</div></div>
+          <div class="praise-kpi-box"><div class="body-sm">高频学科</div><div class="praise-kpi-num">${escapeHtml(b.top_subject || '暂无')}</div></div>
+        `;
+      }
+      const subjs = ['全部', ...(b.subject_counts || []).map(x => x.subject)];
+      if (chipsEl) {
+        chipsEl.innerHTML = subjs.map(s => {
+          const cnt = s === '全部' ? b.total_count : ((b.subject_counts || []).find(x => x.subject === s)?.count || 0);
+          return `<button type="button" class="chip" aria-pressed="${activePraiseSubject === s ? 'true' : 'false'}" onclick="filterPraiseSubject('${escapeHtml(s)}')">${escapeHtml(s)} (${cnt})</button>`;
+        }).join('');
+      }
+      const filtered = activePraiseSubject === '全部'
+        ? (b.items || [])
+        : (b.items || []).filter(it => it.subject === activePraiseSubject);
+      if (listEl) {
+        listEl.innerHTML = filtered.length
+          ? filtered.map(it => `
+              <div class="md-card md-card-tonal" style="padding: 14px; gap: 6px;">
+                <div class="asg-header">
+                  <div class="badge-row" style="align-items: center;">
+                    <span class="badge badge-primary">${escapeHtml(it.subject)}</span>
+                    <strong style="font-size: 0.9375rem;">${escapeHtml(it.title)}</strong>
+                    <span class="body-sm">${escapeHtml(it.teacher_name)} · ${escapeHtml(it.date)} · ${escapeHtml(it.source)}</span>
+                  </div>
+                  <div class="badge-row">
+                    ${it.verified ? '<span class="badge badge-primary">已确认</span>' : `<button type="button" class="btn btn-tonal btn-sm" onclick="verifyClassPerformance('${escapeHtml(it.id)}')">确认</button>`}
+                    <button type="button" class="btn btn-text btn-sm" style="color: var(--md-sys-color-error);" onclick="confirmDeleteGrowth('${escapeHtml(it.id)}', '${escapeHtml(it.title)}')">删除</button>
+                  </div>
+                </div>
+                <p class="body-sm" style="color: var(--md-sys-color-on-surface);">${escapeHtml(it.content)}</p>
+                ${it.parent_note ? `<p class="body-sm" style="color: var(--md-sys-color-primary);">家长备注：${escapeHtml(it.parent_note)}</p>` : ''}
+                <details class="md-disclosure">
+                  <summary>查看原文证据 / 写家长备注</summary>
+                  <p class="body-sm" style="margin-block-end: 8px;">${escapeHtml(it.evidence || '')}</p>
+                  <div class="input-row">
+                    <input id="note-${escapeHtml(it.id)}" class="md-input" style="min-block-size: 38px;" placeholder="写一条家长备注…" value="${escapeHtml(it.parent_note || '')}" />
+                    <button type="button" class="btn btn-tonal btn-sm" onclick="saveGrowthNote('${escapeHtml(it.id)}')">保存</button>
+                  </div>
+                </details>
+              </div>
+            `).join('')
+          : '<p class="body-sm">暂无该学科的老师表扬记录，可在下方手动补录或等待钉钉班级群自动同步。</p>';
+      }
+      if (railList) {
+        const top3 = (b.items || []).slice(0, 3);
+        railList.innerHTML = top3.length
+          ? top3.map(it => `
+              <div style="padding: 10px 12px; border-radius: 10px; background: #F4F6FA;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #1A73E8;">${escapeHtml(it.subject)} · ${escapeHtml(it.teacher_name)} · ${escapeHtml(it.date)}</div>
+                <div style="font-size: 0.8125rem; color: #1F1F1F; margin-top: 3px;">${escapeHtml(it.content)}</div>
+              </div>
+            `).join('')
+          : '<p class="body-sm">暂无老师表扬记录</p>';
+      }
+    }
+
+    async function submitTeacherPraise(event) {
+      event.preventDefault();
+      const subject = document.getElementById('praise-subject')?.value || '综合';
+      const teacher_name = (document.getElementById('praise-teacher')?.value || '').trim();
+      const title = (document.getElementById('praise-title')?.value || '').trim();
+      const content = (document.getElementById('praise-content')?.value || '').trim();
+      if (!title || !content) return;
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/praise`, {
+          method: 'POST',
+          body: JSON.stringify({ subject, teacher_name, title, content }),
+        });
+        document.getElementById('praise-title').value = '';
+        document.getElementById('praise-content').value = '';
+        showSnackbar('已记入教师表扬看板');
+        loadGrowthAnalytics();
+      } catch (err) {
+        showSnackbar(`保存失败：${err.message}`);
+      }
+    }
+
+    function renderHabitAutoStats(hs) {
+      const box = document.getElementById('habit-auto-stats');
+      const badge = document.getElementById('habit-streak-badge');
+      if (!hs || !box) return;
+      if (badge) badge.textContent = `最高坚持 ${hs.max_streak_days || 0} 天`;
+      const cadenceLabels = { daily: '每日重复', weekdays: '工作日', once: '仅今日' };
+      const rows = (hs.tasks || []).map(t => `
+        <div class="setting-row" style="padding-block: 8px;">
+          <div class="setting-info">
+            <strong style="font-size: 0.875rem;">${escapeHtml(t.title)}</strong>
+            <span class="body-sm" style="margin-left: 6px;">${cadenceLabels[t.cadence] || t.cadence}</span>
+          </div>
+          <div class="badge-row">
+            <span class="badge ${t.done_today ? 'badge-primary' : 'badge-neutral'}">${t.done_today ? '今日已打卡' : '今日未打卡'}</span>
+            <span class="badge badge-primary">连胜 ${t.streak_days || 0} 天</span>
+          </div>
+        </div>
+      `).join('');
+      box.innerHTML = `
+        <div class="praise-kpi-grid">
+          <div class="praise-kpi-box"><div class="body-sm">近 7 天作业完成率</div><div class="praise-kpi-num">${hs.avg_homework_pct_7d || 0}%</div></div>
+          <div class="praise-kpi-box"><div class="body-sm">今日自定义任务</div><div class="praise-kpi-num">${hs.done_today_count || 0} / ${hs.active_task_count || 0}</div></div>
+          <div class="praise-kpi-box"><div class="body-sm">最长连胜</div><div class="praise-kpi-num">${hs.max_streak_days || 0} 天</div></div>
+        </div>
+        ${rows || '<p class="body-sm">在「今日 → 自定义任务」新增每日习惯后，这里将自动统计坚持天数。</p>'}
+      `;
+    }
+
+    async function loadGrowthAnalytics() {
+      const today = getTodayInfo();
+      const picker = document.getElementById('growth-month-picker');
+      if (picker && !picker.value) {
+        picker.value = today.monthStr;
+      }
+      const targetMonth = (picker && picker.value) || today.monthStr;
+      // Immediately render current month calendar with today highlighted even before network returns
+      renderMonthlyCalendar(buildClientMonthCalendar(targetMonth));
+      try {
+        const d = await api(`/v1/guardian/students/${currentStudent}/growth/analytics?month=${encodeURIComponent(targetMonth)}`);
+        const dc = d.daily_completion || {};
+        const sumEl = document.getElementById('growth-daily-summary');
+        const compEl = document.getElementById('growth-completion-badge');
+        const extraBadge = document.getElementById('growth-extra-badge');
+        const extraRow = document.getElementById('growth-extra-tasks-row');
+
+        if (sumEl) {
+          sumEl.textContent = `今日作业 ${dc.today_homework_done || 0}/${dc.today_homework_total || 0}（${dc.today_homework_pct || 0}%），额外任务 ${dc.today_extra_done || 0}/${dc.today_extra_total || 0}`;
+        }
+        if (compEl) compEl.textContent = `今日作业 ${dc.today_homework_pct || 0}%`;
+        if (extraBadge) extraBadge.textContent = `额外任务 ${dc.today_extra_done || 0}/${dc.today_extra_total || 0}`;
+        if (extraRow) {
+          const extras = dc.today_extra_tasks || [];
+          extraRow.innerHTML = extras.length
+            ? extras.map(t => `<span class="badge ${t.done ? 'badge-primary' : 'badge-neutral'}">${t.done ? '已完成' : '待完成'} · ${escapeHtml(t.kind)}：${escapeHtml(t.title)}</span>`).join('')
+            : '';
+        }
+        if (d.monthly_calendar) {
+          renderMonthlyCalendar(d.monthly_calendar);
+        }
+        if (d.teacher_praise_board) {
+          renderTeacherPraiseBoard(d.teacher_praise_board);
+        }
+        if (d.habit_summary) {
+          renderHabitAutoStats(d.habit_summary);
+        }
+
+        cachedCurriculum = d.curriculum_progress || [];
+        renderCurriculumSubject(activeCurriculumSubject);
+
+        const mCards = document.getElementById('growth-method-cards');
+        if (mCards) {
+          mCards.innerHTML = (d.method_cards || []).length
+            ? d.method_cards.map(c => `<span class="badge badge-primary">方法卡：${escapeHtml(c.front)}</span>`).join('')
+            : '<span class="body-sm">隔天独立复练通过后自动解锁方法卡</span>';
+        }
+
+        const emo = d.emotion_barometer || {};
+        const riskEl = document.getElementById('growth-emo-risk-badge');
+        const cntEl = document.getElementById('growth-emo-counts');
+        const tipEl = document.getElementById('growth-emo-tip');
+        if (riskEl) {
+          const rMap = { high: ['需关注倾听', 'badge-warn'], attention: ['轻度压力', 'badge-warn'], normal: ['情绪平稳', 'badge-primary'] };
+          const [txt, cls] = rMap[emo.highest_risk || 'normal'] || rMap.normal;
+          riskEl.textContent = txt;
+          riskEl.className = `badge ${cls}`;
+        }
+        if (cntEl) {
+          cntEl.innerHTML = (emo.mood_counts || []).map(m => `<span class="badge badge-neutral">${escapeHtml(m.label)} ${m.count}</span>`).join('');
+        }
+        if (tipEl) tipEl.textContent = emo.latest_parent_tip ? `建议：${emo.latest_parent_tip}` : '';
+      } catch (_) {}
+    }
+
+    async function verifyClassPerformance(growthId) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/growth/${growthId}/verify`, { method: 'POST' });
+        showSnackbar('已确认并记入正式成长档案');
+        await loadToday();
+      } catch (err) {
+        showSnackbar(`确认失败：${err.message}`);
+      }
+    }
+
+    async function loadStudentSkills() {
+      const box = document.getElementById('skills-list');
+      if (!box) return;
+      try {
+        const d = await api(`/v1/guardian/students/${currentStudent}/skills`);
+        box.innerHTML = (d.skills || []).map(s => `
+          <article class="md-card ${s.enabled ? '' : 'md-card-tonal'}">
+            <div class="asg-header">
+              <div>
+                <h3 class="title-md">${escapeHtml(s.title_cn)}</h3>
+                <div class="body-sm">已调用 ${s.invocation_count || 0} 次</div>
+              </div>
+              <span class="badge ${s.enabled ? 'badge-primary' : 'badge-neutral'}">${s.enabled ? '已启用' : '已暂停'}</span>
+            </div>
+            <p class="body-sm" style="margin-top:6px;">${escapeHtml(s.summary_cn || s.description)}</p>
+            <div class="badge-row" style="justify-content:space-between;align-items:center;margin-top:8px;">
+              <span class="badge badge-neutral">${s.is_core ? '核心技能' : '可选技能'}</span>
+              <button type="button" class="btn ${s.enabled ? 'btn-outlined' : 'btn-filled'} btn-sm"
+                onclick="toggleStudentSkill('${escapeHtml(s.name)}', ${!s.enabled})">
+                ${s.enabled ? '暂停' : '启用'}
+              </button>
+            </div>
+          </article>
+        `).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="md-card md-card-tonal"><p class="body-sm">技能列表加载失败（${escapeHtml(err.message)}），请确认后端服务已重启至最新版本。</p></div>`;
+      }
+    }
+
+    async function toggleStudentSkill(skillName, nextEnabled) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/skills/${encodeURIComponent(skillName)}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ enabled: nextEnabled }),
+        });
+        showSnackbar(`${skillName} 已${nextEnabled ? '启用' : '暂停'}`);
+        await loadStudentSkills();
+      } catch (err) {
+        showSnackbar(`操作失败：${err.message}`);
+      }
+    }
+
+    function selectStudent(stuId) {
+      currentStudent = stuId;
+      renderStudentProfileForm();
+      const menu = document.getElementById('student-menu');
+      if (menu && typeof menu.hidePopover === 'function') {
+        try { menu.hidePopover(); } catch (_) {}
+      }
+      loadToday();
+      loadGrowthAnalytics();
+      loadConversations();
+      loadStudentSkills();
+      loadMemories();
+      showSnackbar(`已切换至 ${STUDENTS[stuId]?.name || stuId} 的档案`);
+    }
+
+    async function seedDemo() {
+      const menu = document.getElementById('student-menu');
+      if (menu && typeof menu.hidePopover === 'function') {
+        try { menu.hidePopover(); } catch (_) {}
+      }
+      await api('/v1/guardian/dev/seed-demo', { method: 'POST' });
+      await loadToday();
+      await loadGrowth();
+      await loadMemories();
+      showSnackbar('演示数据已刷新');
+    }
+
+    function submissionBadge(status) {
+      const map = {
+        parent_confirmed: ['家长已确认提交', 'badge-primary'],
+        photo: ['已拍照留证', 'badge-primary'],
+        child_said_done: ['孩子口述已交', 'badge-neutral'],
+        needs_parent: ['待家长核对提交', 'badge-warn'],
+        not_yet: ['尚未提交', 'badge-neutral'],
+      };
+      const [label, cls] = map[status] || ['待提交', 'badge-neutral'];
+      return `<span class="badge ${cls}">${label}</span>`;
+    }
+
+    async function loadToday() {
+      loadCustomTasks();
+      try {
+        const data = await api(`/v1/guardian/students/${currentStudent}/today`);
+        const banner = document.getElementById('sync-banner');
+        const syncText = document.getElementById('sync-text');
+        banner.classList.toggle('is-warn', Boolean(data.stale_warning));
+        syncText.textContent = data.stale_warning
+          ? `同步提示：${data.stale_warning}`
+          : `钉钉班级群同步正常 · ${data.student_name} 今日共 ${data.assignments.length} 项作业`;
+
+        const actionSection = document.getElementById('action-section');
+        const actionList = document.getElementById('action-list');
+        if (data.needs_action.length > 0) {
+          actionSection.style.display = 'grid';
+          actionList.innerHTML = data.needs_action.map((a) => `
+            <article class="md-card md-card-attention">
+              <div class="asg-header">
+                <div>
+                  <h3 class="asg-title">${escapeHtml(a.subject)} · ${escapeHtml(a.page_ref || a.item_range || '待核对')}</h3>
+                  <div class="asg-meta">${escapeHtml(a.content)}</div>
+                </div>
+                <span class="badge badge-warn">待确认</span>
+              </div>
+              <div class="badge-row">
+                ${a.submission_status === 'needs_parent'
+                  ? `<button type="button" class="btn btn-filled btn-sm" onclick="confirmSub('${escapeHtml(a.id)}')">确认已提交</button>`
+                  : ''}
+                ${a.needs_parent_confirm
+                  ? `<button type="button" class="btn btn-tonal btn-sm" onclick="confirmUnclear('${escapeHtml(a.id)}')">已核对内容</button>`
+                  : ''}
+              </div>
+            </article>
+          `).join('');
+        } else {
+          actionSection.style.display = 'none';
+          actionList.innerHTML = '';
+        }
+
+        // Populate 3-Stage Learning Flow (Review & Preview) + Class Group Praise
+        const stages = data.stages || {};
+        const revItems = stages.review || [];
+        const preItems = stages.preview || [];
+        const perfItems = data.class_performances || [];
+        const revBadge = document.getElementById('stage-review-badge');
+        const preBadge = document.getElementById('stage-preview-badge');
+        const revBox = document.getElementById('today-review-list');
+        const preBox = document.getElementById('today-preview-list');
+        const perfBox = document.getElementById('today-class-perf-list');
+        if (revBadge) revBadge.textContent = `复习 ${revItems.length} 项`;
+        if (preBadge) preBadge.textContent = `预习 ${preItems.length} 项`;
+        if (revBox) {
+          revBox.innerHTML = revItems.length
+            ? revItems.map(r => `<div class="body-sm">• <b>${escapeHtml(r.method_note || r.topic_id)}</b>（${escapeHtml(r.status)}）</div>`).join('')
+            : '<div class="body-sm">今日暂无待巩固复练题</div>';
+        }
+        if (preBox) {
+          preBox.innerHTML = preItems.length
+            ? preItems.map(p => `<div class="body-sm">• <b>${escapeHtml(p.subject)}</b>：${escapeHtml(p.content)}</div>`).join('')
+            : '<div class="body-sm">暂无指定预习任务，可由孩子语音对芽米说「预习第几课」</div>';
+        }
+        if (perfBox) {
+          perfBox.innerHTML = perfItems.length
+            ? perfItems.map(p => `
+                <div class="badge-row" style="justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--md-sys-color-outline-variant);">
+                  <div>
+                    <span class="badge ${p.category === 'teacher_praise' ? 'badge-primary' : 'badge-neutral'}">${p.category === 'teacher_praise' ? '老师表扬' : '课堂反馈'}</span>
+                    <span class="body-sm" style="margin-left:6px;color:var(--md-sys-color-on-surface);">${escapeHtml(p.content)}</span>
+                  </div>
+                  ${p.verified
+                    ? '<span class="badge badge-primary">已确认</span>'
+                    : `<button type="button" class="btn btn-tonal btn-sm" onclick="verifyClassPerformance('${escapeHtml(p.id)}')">确认记入成长</button>`}
+                </div>`).join('')
+            : '<div class="body-sm">今日暂无班级群表扬或课堂反馈记录（可在钉钉群转发消息自动同步）</div>';
+        }
+
+        const list = document.getElementById('assignments-list');
+        if (data.assignments.length === 0) {
+          list.innerHTML = `<div class="md-card md-card-tonal"><p class="body-sm">暂无作业记录。可在右上角档案菜单点击「刷新演示数据」。</p></div>`;
+          return;
+        }
+        list.innerHTML = data.assignments.map((a) => `
+          <article class="md-card">
+            <div class="asg-header">
+              <div>
+                <h3 class="asg-title">${escapeHtml(a.subject)} · ${escapeHtml(a.page_ref || '课内作业')}</h3>
+                <div class="asg-meta">${escapeHtml(a.content)}</div>
+              </div>
+            </div>
+            <div class="badge-row" style="justify-content: space-between; align-items: center;">
+              <div class="badge-row">
+                <span class="badge ${a.completed ? 'badge-primary' : 'badge-neutral'}">${a.completed ? '已写完' : '进行中'}</span>
+                ${submissionBadge(a.submission_status)}
+              </div>
+              <div class="badge-row">
+                <button type="button" class="btn ${a.completed ? 'btn-outlined' : 'btn-tonal'} btn-sm"
+                  onclick="toggleAssignmentCompleted('${escapeHtml(a.id)}', ${!a.completed})">
+                  ${a.completed ? '取消完成' : '标记完成'}
+                </button>
+                <button type="button" class="btn btn-text btn-sm" onclick="deleteAssignment('${escapeHtml(a.id)}')">删除</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      } catch (err) {
+        document.getElementById('sync-text').textContent = `加载失败：${err.message}`;
+      }
+    }
+
+    async function toggleAssignmentCompleted(assignmentId, nextCompleted) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/assignments/${assignmentId}/complete`, {
+          method: 'PATCH',
+          body: JSON.stringify({ completed: nextCompleted }),
+        });
+        showSnackbar(nextCompleted ? '已标记为完成，成长日历已同步更新' : '已取消完成状态');
+        await loadToday();
+        await loadGrowthAnalytics();
+      } catch (err) {
+        showSnackbar(`操作失败：${err.message}`);
+      }
+    }
+
+    async function deleteAssignment(assignmentId) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/assignments/${assignmentId}`, { method: 'DELETE' });
+        showSnackbar('已删除该条作业');
+        loadToday();
+      } catch (err) {
+        showSnackbar(`删除失败：${err.message}`);
+      }
+    }
+
+    async function syncActiveStudentToDevice() {
+      const idx = Math.max(0, studentList.findIndex(s => s.student_id === currentStudent));
+      try {
+        const res = await fetch(`/v1/devices/active-student?hardware_uid=mosaico-yami-s31&slot=${idx}`, { method: 'POST' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const d = await res.json();
+        const menu = document.getElementById('student-menu');
+        if (menu && menu.hidePopover) menu.hidePopover();
+        showSnackbar(`已将 Mosaico 切换到「${d.student_name}」`);
+      } catch (err) {
+        showSnackbar(`同步失败：${err.message}`);
+      }
+    }
+
+    let currentCustomTaskFilter = 'all';
+
+    function filterCustomTasks(status) {
+      currentCustomTaskFilter = status;
+      document.querySelectorAll('[data-ct-filter]').forEach((btn) => {
+        btn.setAttribute('aria-pressed', btn.dataset.ctFilter === status ? 'true' : 'false');
+      });
+      loadCustomTasks();
+    }
+
+    async function loadCustomTasks() {
+      const box = document.getElementById('custom-tasks-list');
+      if (!box) return;
+      try {
+        const q = currentCustomTaskFilter === 'all' ? '' : `?status=${encodeURIComponent(currentCustomTaskFilter)}`;
+        const rows = await api(`/v1/guardian/students/${currentStudent}/custom-tasks${q}`);
+        if (!rows.length) {
+          box.innerHTML = '<div class="body-sm">暂无自定义任务，可在上方新增每日或单次任务</div>';
+          return;
+        }
+        const cadenceLabels = { daily: '每日重复', weekdays: '工作日', once: '仅今日' };
+        box.innerHTML = rows.map((t) => `
+          <div class="setting-row" style="padding-block: 10px;">
+            <div class="setting-info" style="display: grid; gap: 4px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn ${t.done_today ? 'btn-filled' : 'btn-outlined'} btn-sm"
+                  onclick="toggleCustomTaskDone('${escapeHtml(t.id)}', ${!t.done_today})">
+                  ${t.done_today ? '今日已完成' : '打卡完成'}
+                </button>
+                <strong style="font-size: 0.9375rem; ${t.status === 'paused' ? 'opacity:0.55;text-decoration:line-through;' : ''}">${escapeHtml(t.title)}</strong>
+                <span class="badge badge-neutral">${cadenceLabels[t.cadence] || t.cadence}</span>
+                <span class="badge ${t.status === 'active' ? 'badge-primary' : 'badge-neutral'}">${t.status === 'active' ? '进行中' : '已暂停'}</span>
+                ${t.streak_days > 0 ? `<span class="badge badge-primary">已坚持 ${t.streak_days} 天</span>` : ''}
+              </div>
+            </div>
+            <div class="badge-row">
+              <button type="button" class="btn btn-text btn-sm" onclick="toggleCustomTaskStatus('${escapeHtml(t.id)}', '${t.status === 'active' ? 'paused' : 'active'}')">
+                ${t.status === 'active' ? '暂停' : '恢复'}
+              </button>
+              <button type="button" class="btn btn-text btn-sm" onclick="editCustomTaskTitle('${escapeHtml(t.id)}', '${escapeHtml(t.title)}')">编辑</button>
+              <button type="button" class="btn btn-text btn-sm" style="color: var(--md-sys-color-error);" onclick="deleteCustomTaskItem('${escapeHtml(t.id)}', '${escapeHtml(t.title)}')">删除</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="body-sm">自定义任务加载失败（${escapeHtml(err.message)}），请确认后端服务已重启。</div>`;
+      }
+    }
+
+    async function createCustomTaskItem(event) {
+      event.preventDefault();
+      const input = document.getElementById('custom-task-input');
+      const cadence = document.getElementById('custom-task-cadence')?.value || 'daily';
+      const title = (input?.value || '').trim();
+      if (!title) return;
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/custom-tasks`, {
+          method: 'POST',
+          body: JSON.stringify({ title, cadence }),
+        });
+        input.value = '';
+        showSnackbar('已新增自定义任务');
+        loadCustomTasks();
+      } catch (err) {
+        showSnackbar(`新增失败：${err.message}`);
+      }
+    }
+
+    async function toggleCustomTaskDone(taskId, nextDone) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/custom-tasks/${taskId}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ done_today: nextDone }),
+        });
+        showSnackbar(nextDone ? '已打卡完成' : '已取消今日打卡');
+        loadCustomTasks();
+      } catch (err) {
+        showSnackbar(`操作失败：${err.message}`);
+      }
+    }
+
+    async function toggleCustomTaskStatus(taskId, nextStatus) {
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/custom-tasks/${taskId}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ status: nextStatus }),
+        });
+        showSnackbar(nextStatus === 'paused' ? '任务已暂停' : '任务已恢复');
+        loadCustomTasks();
+      } catch (err) {
+        showSnackbar(`操作失败：${err.message}`);
+      }
+    }
+
+    async function editCustomTaskTitle(taskId, oldTitle) {
+      const next = window.prompt('修改任务名称', oldTitle);
+      if (!next || !next.trim() || next.trim() === oldTitle) return;
+      try {
+        await api(`/v1/guardian/students/${currentStudent}/custom-tasks/${taskId}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ title: next.trim() }),
+        });
+        showSnackbar('任务已更新');
+        loadCustomTasks();
+      } catch (err) {
+        showSnackbar(`更新失败：${err.message}`);
+      }
+    }
+
+    function deleteCustomTaskItem(taskId, title) {
+      openConfirmDialog({
+        title: '删除这条自定义任务？',
+        body: `删除「${title}」后不可恢复。`,
+        okLabel: '确认删除',
+        onConfirm: async () => {
+          await api(`/v1/guardian/students/${currentStudent}/custom-tasks/${taskId}`, { method: 'DELETE' });
+          showSnackbar('已删除自定义任务');
+          loadCustomTasks();
+        },
+      });
+    }
+
+    async function confirmSub(assignmentId) {
+      await api(`/v1/guardian/students/${currentStudent}/assignments/${assignmentId}/confirm-submission`, { method: 'POST' });
+      showSnackbar('已确认提交状态');
+      loadToday();
+    }
+
+    async function confirmUnclear(assignmentId) {
+      await api(`/v1/guardian/students/${currentStudent}/assignments/${assignmentId}/confirm-unclear`, { method: 'POST' });
+      showSnackbar('已核对作业说明');
+      loadToday();
+    }
+
+    function fillDictationExample(text) {
+      const input = document.getElementById('dict-utterance');
+      input.value = text;
+      input.focus();
+    }
+
+    async function submitNaturalDictation(event) {
+      event.preventDefault();
+      const utterance = document.getElementById('dict-utterance').value.trim();
+      if (!utterance) return;
+      try {
+        const res = await api('/v1/guardian/dictation/natural', {
+          method: 'POST',
+          body: JSON.stringify({
+            student_id: currentStudent,
+            utterance,
+            source: 'parent_dingtalk',
+          }),
+        });
+        const card = document.getElementById('dict-result-card');
+        card.style.display = 'grid';
+        const badge = document.getElementById('dict-result-badge');
+        badge.className = res.found ? 'badge badge-primary' : 'badge badge-warn';
+        badge.textContent = res.found ? '已匹配教材并启动语音听写' : '教材库未收录该课时';
+        document.getElementById('dict-result-count').textContent = res.found ? `共 ${res.word_count} 个词` : '需补充词表';
+        document.getElementById('dict-result-title').textContent = res.title || utterance;
+        document.getElementById('dict-result-spoken').textContent = res.spoken_text;
+        showSnackbar(res.found ? '听写已下发至芽米桌宠' : '未找到该课时，请在下方手动补充');
+      } catch (err) {
+        showSnackbar(`启动失败：${err.message}`);
+      }
+    }
+
+    function filterGrowth(cat) {
+      currentGrowthCategory = cat;
+      document.querySelectorAll('#tab-growth .chip').forEach((c) => {
+        c.setAttribute('aria-pressed', c.dataset.cat === cat ? 'true' : 'false');
+      });
+      loadGrowth();
+    }
+
+    async function loadGrowth() {
+      // Consolidated into loadGrowthAnalytics() (Teacher Praise Board + Textbook Mastery + Habit Auto-Stats)
+      await loadGrowthAnalytics();
+    }
+
+    async function saveGrowthNote(growthId) {
+      const note = (document.getElementById(`note-${growthId}`)?.value || '').trim();
+      await api(`/v1/guardian/students/${currentStudent}/growth/${growthId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ parent_note: note }),
+      });
+      showSnackbar('家长备注已保存');
+      loadGrowth();
+    }
+
+    function formatLocalDateTime(isoStr) {
+      if (!isoStr) return '';
+      const norm = /[zZ]|[+-]\d{2}:\d{2}$/.test(String(isoStr)) ? String(isoStr) : `${isoStr}Z`;
+      const d = new Date(norm);
+      if (Number.isNaN(d.getTime())) return String(isoStr).slice(0, 16).replace('T', ' ');
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      return `${y}-${m}-${day} ${hh}:${mm}`;
+    }
+
+    function setConvDateOffset(offsetDays) {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const inp = document.getElementById('conv-date-filter');
+      if (inp) inp.value = val;
+      loadConversations();
+    }
+
+    function resetConvDateFilter() {
+      const inp = document.getElementById('conv-date-filter');
+      if (inp) inp.value = '';
+      loadConversations();
+    }
+
+    async function loadConversations() {
+      try {
+        const dayVal = (document.getElementById('conv-date-filter')?.value || '').trim();
+        const tzOffset = new Date().getTimezoneOffset();
+        const q = dayVal
+          ? `limit=50&day=${encodeURIComponent(dayVal)}&tz_offset_min=${encodeURIComponent(tzOffset)}`
+          : 'limit=25';
+        const rows = await api(`/v1/guardian/students/${currentStudent}/conversations?${q}`);
+        const el = document.getElementById('conversation-list');
+        if (!el) return;
+        if (!rows.length) {
+          el.innerHTML = `<p class="body-sm">${dayVal ? `${escapeHtml(dayVal)} 当天暂无语音对话记录。` : '暂无对话记录。对着 Mosaico 喊「Hi, 乐鑫」即可开始对话。'}</p>`;
+          return;
+        }
+        const skillLabels = {
+          'homework-companion': '作业陪伴',
+          'voice-dictation': '教材听写',
+          'english-speaking': '英语口语',
+          'chat-companion': '日常陪伴',
+          'pet-companion-house': '宠物小屋',
+        };
+        el.innerHTML = rows.map((c) => `
+          <div class="setting-row" style="padding-block: 10px;">
+            <div class="setting-info">
+              <div class="badge-row" style="margin-block-end: 4px;">
+                <span class="badge badge-neutral">${escapeHtml(skillLabels[c.skill_name] || c.skill_name)}</span>
+                ${c.created_at ? `<span class="body-sm">${escapeHtml(formatLocalDateTime(c.created_at))}</span>` : ''}
+              </div>
+              <div class="body-sm" style="color: var(--md-sys-color-on-surface);">孩子：${escapeHtml(c.user_text)}</div>
+              <div class="body-sm">芽米：${escapeHtml(c.assistant_text)}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        const el = document.getElementById('conversation-list');
+        if (el) el.innerHTML = `<p class="body-sm">对话记录加载失败：${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    function confirmClearConversations() {
+      openConfirmDialog({
+        title: '清空最近的语音对话记忆？',
+        body: '清空后，芽米将重置当前孩子的连续对话上下文，不影响已保存的作业与成长档案。',
+        okLabel: '确认清空',
+        onConfirm: async () => {
+          const res = await api(`/v1/guardian/students/${currentStudent}/conversations`, { method: 'DELETE' });
+          showSnackbar(`已清空 ${res.deleted_turns} 轮对话记录`);
+          loadConversations();
+        },
+      });
+    }
+
+    async function addManualAssignment(event) {
+      event.preventDefault();
+      const subject = document.getElementById('man-subject').value;
+      const submission_mode = document.getElementById('man-sub-mode').value;
+      const content = document.getElementById('man-content').value.trim();
+      if (!content) return;
+      await api(`/v1/guardian/students/${currentStudent}/assignments`, {
+        method: 'POST',
+        body: JSON.stringify({ subject, submission_mode, content }),
+      });
+      document.getElementById('man-content').value = '';
+      showSnackbar(`已添加「${subject}」作业`);
+      loadToday();
+    }
+
+    async function loadWebhookSettings() {
+      try {
+        const d = await api('/v1/guardian/family/webhook');
+        const input = document.getElementById('set-webhook');
+        const appIdEl = document.getElementById('set-dt-appid');
+        const secretEl = document.getElementById('set-dt-secret');
+        const groupEl = document.getElementById('set-dt-group');
+        if (input) input.value = d.dingtalk_webhook_url || '';
+        if (appIdEl) appIdEl.value = d.dingtalk_app_id || '';
+        if (groupEl) groupEl.value = d.dingtalk_class_group_id || '';
+        if (secretEl) {
+          secretEl.value = '';
+          secretEl.placeholder = d.dingtalk_app_secret_configured
+            ? '已配置 AppSecret（如需更新请重新输入）'
+            : '输入 AppSecret';
+        }
+        const list = document.getElementById('webhook-alerts-list');
+        if (list) {
+          list.innerHTML = (d.recent_alerts || []).slice(0, 4).map((a) => `
+            <div class="body-sm">• [${escapeHtml(a.status)}] ${escapeHtml(a.summary)}</div>
+          `).join('');
+        }
+      } catch (_) {}
+    }
+
+    async function saveFamilyWebhook(event) {
+      event.preventDefault();
+      const url = (document.getElementById('set-webhook')?.value || '').trim();
+      const appId = (document.getElementById('set-dt-appid')?.value || '').trim();
+      const appSecret = (document.getElementById('set-dt-secret')?.value || '').trim();
+      const classGroupId = (document.getElementById('set-dt-group')?.value || '').trim();
+      const payload = {
+        dingtalk_webhook_url: url,
+        dingtalk_app_id: appId,
+        dingtalk_class_group_id: classGroupId,
+      };
+      if (appSecret) {
+        payload.dingtalk_app_secret = appSecret;
+      }
+      await api('/v1/guardian/family/webhook', {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+      });
+      showSnackbar('钉钉集成配置已保存');
+      loadWebhookSettings();
+    }
+
+    async function triggerDwsSync() {
+      showSnackbar('正在通过钉钉 CLI 拉取最新学校通知与作业…');
+      try {
+        const res = await api('/v1/guardian/family/dingtalk/dws-sync', { method: 'POST' });
+        showSnackbar(`同步完成：处理 ${res.synced_count || 0} 条新消息`);
+        loadToday();
+        loadGrowthAnalytics();
+      } catch (err) {
+        showSnackbar(`同步失败：${err.message}`);
+      }
+    }
+
+    async function testFamilyWebhook() {
+      const res = await api('/v1/guardian/family/webhook/test', { method: 'POST' });
+      showSnackbar(`测试提醒已触发（状态：${res.status}）`);
+      loadWebhookSettings();
+    }
+
+    function confirmDeleteGrowth(id, title) {
+      openConfirmDialog({
+        title: '删除这条成长记录？',
+        body: `删除「${title}」后，对应发放的方法卡片也会同步撤销，此操作不可恢复。`,
+        okLabel: '确认删除',
+        onConfirm: async () => {
+          await api(`/v1/guardian/students/${currentStudent}/growth/${id}`, { method: 'DELETE' });
+          showSnackbar('已删除成长记录');
+          loadGrowth();
+        },
+      });
+    }
+
+    const GRADE_LABELS = { 1: '一年级', 2: '二年级', 3: '三年级', 4: '四年级', 5: '五年级', 6: '六年级' };
+
+    async function loadCatalogForGrade(grade, selectedMap = null) {
+      try {
+        const cat = await api(`/v1/guardian/catalog/textbooks?grade=${encodeURIComponent(grade)}`);
+        const currentMap = selectedMap || STUDENTS[currentStudent]?.subject_textbooks || {};
+        (cat.subjects || []).forEach((sub) => {
+          const sel = document.getElementById(`tb-${sub.key}`);
+          if (!sel) return;
+          const desired = currentMap[sub.key] || sub.default_version;
+          const options = sub.versions.includes(desired) ? sub.versions : [desired, ...sub.versions];
+          sel.innerHTML = options.map((v) => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+          sel.value = desired;
+        });
+      } catch (_) {}
+    }
+
+    async function renderStudentProfileForm() {
+      const info = STUDENTS[currentStudent];
+      if (!info) return;
+      document.getElementById('active-student-avatar').textContent = info.name.slice(-1);
+      document.getElementById('active-student-label').textContent = `${info.name} · ${GRADE_LABELS[info.grade] || (info.grade + '年级')}`;
+      const nameEl = document.getElementById('set-name');
+      const gradeEl = document.getElementById('set-grade');
+      const vpEl = document.getElementById('set-voiceprint');
+      const camEl = document.getElementById('set-camera');
+      if (nameEl) nameEl.value = info.name;
+      if (gradeEl) gradeEl.value = String(info.grade || 4);
+      if (vpEl) vpEl.checked = Boolean(info.voiceprint_consent);
+      if (camEl) camEl.checked = Boolean(info.camera_consent);
+      await loadCatalogForGrade(info.grade || 4, info.subject_textbooks);
+      await loadGuardianPet();
+
+      document.querySelectorAll('#student-menu [role="menuitemradio"]').forEach((item) => {
+        const sid = item.dataset.stu;
+        const s = STUDENTS[sid];
+        if (s) {
+          const mathVer = (s.subject_textbooks && s.subject_textbooks.math) || s.textbook || '人教版';
+          const spans = item.querySelectorAll('span');
+          if (spans[0]) spans[0].textContent = s.name.slice(-1);
+          if (spans[1]) spans[1].textContent = s.name;
+          if (spans[2]) spans[2].textContent = `${GRADE_LABELS[s.grade] || (s.grade + '年级')} · ${mathVer}`;
+        }
+        item.setAttribute('aria-checked', sid === currentStudent ? 'true' : 'false');
+      });
+    }
+
+    async function loadStudents() {
+      try {
+        const rows = await api('/v1/guardian/students');
+        rows.forEach((s) => {
+          STUDENTS[s.student_id] = {
+            name: s.name,
+            avatar: s.name.slice(-1),
+            grade: s.grade,
+            meta: GRADE_LABELS[s.grade] || `${s.grade}年级`,
+            textbook: s.textbook_version,
+            subject_textbooks: s.subject_textbooks || {},
+            voiceprint_consent: s.voiceprint_consent,
+            camera_consent: s.camera_consent,
+          };
+        });
+        await renderStudentProfileForm();
+      } catch (_) {}
+    }
+
+    const BREED_ATLAS_IMG = {
+      nebula_dragon: '/guardian/assets/pets/pet_0_nebula_dragon_atlas.png',
+      cloud_puff: '/guardian/assets/pets/pet_1_cloud_puff_atlas.png',
+      mochi_fox: '/guardian/assets/pets/pet_2_mochi_fox_atlas.png',
+      capybara: '/guardian/assets/pets/pet_3_capybara_atlas.png',
+      astro_penguin: '/guardian/assets/pets/pet_4_astro_penguin_atlas.png',
+      chibi_rex: '/guardian/assets/pets/pet_5_chibi_rex_atlas.png',
+      volt_robo: '/guardian/assets/pets/pet_6_volt_robo_atlas.png',
+      aurora_dragon: '/guardian/assets/pets/pet_7_aurora_dragon_atlas.png',
+      sakura_fox: '/guardian/assets/pets/pet_8_sakura_fox_atlas.png',
+    };
+    const SUNNY_ROOM_IMG = '/guardian/assets/pets/stage_sunny_room.png';
+    const RUNAWAY_STAGE_IMG = '/guardian/assets/anime/scene_runaway_empty_nest.png';
+    let activeFoodSlot = 0;
+
+    // Live Hatch-Pet multi-frame sprite engine (mirrors Mosaico firmware physics!)
+    const hatchSprite = {
+      stateKey: 'happy_idle',
+      isRunaway: false,
+      xPct: 50,
+      targetXPct: 50,
+      dir: 1,
+      pauseTicks: 10,
+      tick: 0,
+    };
+    setInterval(() => {
+      const wrap = document.getElementById('pp-sprite-wrap');
+      const actor = document.getElementById('pp-sprite-actor');
+      if (!wrap || !actor) return;
+      if (hatchSprite.isRunaway) {
+        wrap.style.display = 'none';
+        return;
+      }
+      wrap.style.display = 'block';
+      hatchSprite.tick += 1;
+
+      let row = 0;
+      let col = 0;
+      let moving = false;
+
+      if (hatchSprite.stateKey === 'hungry_sad') {
+        hatchSprite.targetXPct = 50;
+        const dx = hatchSprite.targetXPct - hatchSprite.xPct;
+        if (Math.abs(dx) > 1.5) hatchSprite.xPct += Math.sign(dx) * 1.4;
+        row = 3;
+        col = Math.floor(hatchSprite.tick / 3) % 4;
+      } else if (hatchSprite.stateKey === 'eating_joy') {
+        hatchSprite.targetXPct = 64; // Near the food bowl on the right
+        const dx = hatchSprite.targetXPct - hatchSprite.xPct;
+        if (Math.abs(dx) > 2.2) {
+          hatchSprite.dir = dx >= 0 ? 1 : -1;
+          hatchSprite.xPct += Math.sign(dx) * 2.8;
+          moving = true;
+          row = 1;
+          col = hatchSprite.tick % 4;
+        } else {
+          hatchSprite.dir = 1;
+          row = 2;
+          col = Math.floor(hatchSprite.tick / 2) % 4;
+        }
+      } else {
+        const dx = hatchSprite.targetXPct - hatchSprite.xPct;
+        if (Math.abs(dx) > 2.0) {
+          hatchSprite.dir = dx >= 0 ? 1 : -1;
+          hatchSprite.xPct += Math.sign(dx) * 1.8;
+          moving = true;
+          row = 1;
+          col = hatchSprite.tick % 4;
+        } else {
+          if (hatchSprite.pauseTicks > 0) {
+            hatchSprite.pauseTicks -= 1;
+          } else {
+            const stops = [28, 42, 56, 68];
+            hatchSprite.targetXPct = stops[Math.floor(Math.random() * stops.length)];
+            hatchSprite.pauseTicks = 16 + Math.floor(Math.random() * 14);
+          }
+          const idleSeq = [0, 0, 1, 1, 2, 3, 1, 0];
+          row = 0;
+          col = idleSeq[Math.floor(hatchSprite.tick / 2) % idleSeq.length];
+        }
+      }
+
+      wrap.style.left = `${hatchSprite.xPct}%`;
+      actor.style.backgroundPosition = `${(col * 100) / 3}% ${(row * 100) / 3}%`;
+      actor.style.transform = (moving && hatchSprite.dir < 0) ? 'scaleX(-1)' : 'scaleX(1)';
+    }, 150);
+
+    function renderPolaroidPetCard(p) {
+      if (!p) return;
+      const isRunaway = Boolean(p.is_runaway);
+      const stateKey = p.action_state_key || (isRunaway ? 'runaway' : 'happy_idle');
+      const isHungry = stateKey === 'hungry_sad';
+      const isJoy = stateKey === 'eating_joy';
+
+      document.getElementById('pp-title-text').textContent = `${p.breed_cn || '星云小龙'} · ${p.pet_name || '星宝'}`;
+      document.getElementById('pp-hab-text').textContent = `Lv.${p.habitat_lv ?? 1} ${p.habitat_name || '奇幻树屋'}`;
+      document.getElementById('pp-coin-text').textContent = `${p.coins ?? 45} 币`;
+
+      const hg = Math.max(0, Math.min(100, Number(p.hunger ?? 88)));
+      const hp = Math.max(0, Math.min(100, Number(p.happiness ?? 92)));
+      const renderStars = (pct, color) => {
+        const full = Math.round(pct / 20);
+        let html = '';
+        for (let i = 0; i < 5; i++) {
+          html += `<span style="color:${i < full ? color : '#E3DCC9'};font-size:17px;letter-spacing:2px;">★</span>`;
+        }
+        return html;
+      };
+      const dietStars = document.getElementById('pp-diet-stars');
+      const moodStars = document.getElementById('pp-mood-stars');
+      if (dietStars) dietStars.innerHTML = renderStars(hg, isHungry ? '#EC942A' : '#2AA66C');
+      if (moodStars) moodStars.innerHTML = renderStars(hp, '#F46A8A');
+
+      const stage = document.getElementById('pp-stage');
+      stage.className = `pp-stage state-${stateKey}`;
+      const stageImg = document.getElementById('pp-stage-img');
+      const habLv = Math.max(1, Math.min(4, Number(p.habitat_lv ?? 1)));
+      stageImg.src = isRunaway ? RUNAWAY_STAGE_IMG : (p.stage_url || `/guardian/assets/pets/stage_lv${habLv}.png`);
+
+      const actor = document.getElementById('pp-sprite-actor');
+      const atlasUrl = p.atlas_url || BREED_ATLAS_IMG[p.breed] || BREED_ATLAS_IMG.nebula_dragon;
+      if (actor) actor.style.backgroundImage = `url('${atlasUrl}')`;
+      hatchSprite.stateKey = stateKey;
+      hatchSprite.isRunaway = isRunaway;
+
+      const pill = document.getElementById('pp-mood-pill');
+      pill.textContent = p.status_pill_text || '扑闪着小翅膀在屋里巡游探险';
+      pill.className = `pp-mood-pill${isRunaway ? ' is-runaway' : (isHungry ? ' is-hungry' : '')}`;
+
+      const h1 = document.getElementById('pp-heart-1');
+      const h2 = document.getElementById('pp-heart-2');
+      const h3 = document.getElementById('pp-heart-3');
+      if (h1) h1.style.display = isJoy ? 'block' : 'none';
+      if (h2) h2.style.display = isJoy ? 'block' : 'none';
+      if (h3) h3.style.display = isJoy ? 'block' : 'none';
+
+      const foodBar = document.getElementById('pp-food-bar');
+      if (isRunaway) {
+        foodBar.innerHTML = `
+          <button type="button" class="pp-recall-btn" onclick="guardianRecallPet()">
+            <span>花 ${p.recall_cost || 100} 币召回 ${escapeHtml(p.pet_name || '宠物')}（约5项学习任务）· 点击立即接回家</span>
+          </button>
+        `;
+      } else {
+        const foods = p.foods || [
+          { slot: 0, key: '能量星果', label: '能量星果', cost: 10, icon: 'fish' },
+          { slot: 1, key: '星云大餐', label: '星云大餐', cost: 20, icon: 'honey' },
+          { slot: 2, key: '彩虹曲奇', label: '曲奇', cost: 15, icon: 'cookie' },
+        ];
+        foodBar.innerHTML = foods.map((f, idx) => `
+          <button type="button" class="pp-food-slot ${idx === activeFoodSlot ? 'active' : ''}"
+                  onclick="guardianFeedPet('${escapeHtml(f.key)}', ${idx})">
+            <img src="/guardian/assets/fluent3d/${escapeHtml(f.icon || 'bone')}.png" alt="" />
+            <span>${escapeHtml(f.label)} ${f.cost}币</span>
+          </button>
+        `).join('');
+      }
+
+      const upBtn = document.getElementById('btn-upgrade-habitat');
+      if (upBtn) {
+        if (p.next_habitat_cost) {
+          upBtn.textContent = `升级小窝 (${p.next_habitat_cost}币)`;
+          upBtn.disabled = false;
+        } else {
+          upBtn.textContent = '小窝已满级 Lv.4';
+          upBtn.disabled = true;
+        }
+      }
+    }
+
+    async function loadGuardianPet() {
+      try {
+        const d = await api(`/v1/guardian/students/${currentStudent}/pet`);
+        const p = d.pet || {};
+        const breedEl = document.getElementById('set-pet-breed');
+        const nameEl = document.getElementById('set-pet-name');
+        const badgeEl = document.getElementById('pet-status-badge');
+        const detailEl = document.getElementById('pet-detail-badges');
+        if (breedEl && p.breed) breedEl.value = p.breed;
+        if (nameEl) nameEl.value = p.pet_name || '';
+        if (badgeEl) badgeEl.textContent = `宠粮币 ${p.coins ?? 45}`;
+        renderPolaroidPetCard(p);
+        if (detailEl) {
+          detailEl.innerHTML = `
+            <span class="badge badge-primary">Lv.${p.level ?? 1} ${escapeHtml(p.breed_cn || '金毛')}</span>
+            <span class="badge badge-neutral">${escapeHtml(p.last_event_text || '')}</span>
+          `;
+        }
+      } catch (_) {}
+    }
+
+    async function guardianFeedPet(foodName, slotIdx) {
+      activeFoodSlot = slotIdx;
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet/feed`, {
+          method: 'POST',
+          body: JSON.stringify({ food: foodName }),
+        });
+        if (res.pet) renderPolaroidPetCard(res.pet);
+        await loadGuardianPet();
+        showSnackbar(res.message || `已投喂 ${foodName}`);
+      } catch (err) {
+        showSnackbar(`喂食失败：${err.message}`);
+      }
+    }
+
+    async function guardianPlayWithPet() {
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet/play`, { method: 'POST' });
+        if (res.pet) renderPolaroidPetCard(res.pet);
+        await loadGuardianPet();
+        showSnackbar(res.message || '已陪宠物开心玩耍');
+      } catch (err) {
+        showSnackbar(`互动失败：${err.message}`);
+      }
+    }
+
+    async function guardianUpgradeHabitat() {
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet/upgrade`, { method: 'POST' });
+        if (res.pet) renderPolaroidPetCard(res.pet);
+        await loadGuardianPet();
+        showSnackbar(res.message || '小窝升级完成');
+      } catch (err) {
+        showSnackbar(`升级失败：${err.message}`);
+      }
+    }
+
+    async function guardianRecallPet() {
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet/recall`, { method: 'POST' });
+        if (res.pet) renderPolaroidPetCard(res.pet);
+        await loadGuardianPet();
+        showSnackbar(res.message || '已召回宠物');
+      } catch (err) {
+        showSnackbar(`召回失败：${err.message}`);
+      }
+    }
+
+    async function guardianSimulatePetTime(days) {
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet/simulate-time`, {
+          method: 'POST',
+          body: JSON.stringify({ days }),
+        });
+        if (res.pet) renderPolaroidPetCard(res.pet);
+        await loadGuardianPet();
+        showSnackbar(res.message || `已模拟 ${days} 天时间流逝`);
+      } catch (err) {
+        showSnackbar(`模拟失败：${err.message}`);
+      }
+    }
+
+    const BREED_META_MAP = {
+      nebula_dragon: { breed_cn: '星云小龙', default_name: '星宝', idle_pill: '扑闪着小翅膀在屋里巡游探险' },
+      cloud_puff:    { breed_cn: '棉花糖云', default_name: '绵绵', idle_pill: '软乎乎地在阳光地毯上飘来飘去' },
+      mochi_fox:     { breed_cn: '麻薯灵狐', default_name: '莓莓', idle_pill: '摇着蓬松大尾巴好奇地四处张望' },
+      capybara:      { breed_cn: '泡芙水豚', default_name: '佛系橘', idle_pill: '顶着小橘子慢悠悠地在屋里散步' },
+      astro_penguin: { breed_cn: '宇航企鹅', default_name: '啵啵', idle_pill: '戴着宇航头盔一摇一摆走太空步' },
+      chibi_rex:     { breed_cn: '呆萌恐龙', default_name: '咔咔', idle_pill: '迈着小短腿开心地在房间里溜达' },
+      volt_robo:     { breed_cn: '雷电机甲', default_name: '闪闪', idle_pill: '闪着像素笑脸能量满满巡逻中' },
+      aurora_dragon: { breed_cn: '极光星龙', default_name: '幻幻', idle_pill: '泛着极光星辉轻盈地在屋内巡航' },
+      sakura_fox:    { breed_cn: '樱花灵狐', default_name: '桃桃', idle_pill: '伴着花瓣香气轻快地在房间踱步' },
+    };
+
+    function previewSelectedBreed() {
+      const breed = document.getElementById('set-pet-breed')?.value || 'nebula_dragon';
+      const meta = BREED_META_MAP[breed] || BREED_META_MAP.nebula_dragon;
+      const nameEl = document.getElementById('set-pet-name');
+      if (nameEl) {
+        nameEl.value = meta.default_name;
+      }
+      const titleEl = document.getElementById('pp-title-text');
+      const pillEl = document.getElementById('pp-mood-pill');
+      const actor = document.getElementById('pp-sprite-actor');
+      if (titleEl) titleEl.textContent = `${meta.breed_cn} · ${meta.default_name}`;
+      if (pillEl) pillEl.textContent = meta.idle_pill;
+      if (actor && BREED_ATLAS_IMG[breed]) {
+        actor.style.backgroundImage = `url('${BREED_ATLAS_IMG[breed]}')`;
+      }
+    }
+
+    async function saveGuardianPet(event) {
+      event.preventDefault();
+      const breed = document.getElementById('set-pet-breed').value;
+      const pet_name = document.getElementById('set-pet-name').value.trim();
+      try {
+        const res = await api(`/v1/guardian/students/${currentStudent}/pet`, {
+          method: 'PATCH',
+          body: JSON.stringify({ breed, pet_name: pet_name || null }),
+        });
+        if (res.pet) {
+          renderPolaroidPetCard(res.pet);
+        }
+        await loadGuardianPet();
+        showSnackbar(res.message || '已切换伙伴并同步到 Mosaico');
+      } catch (err) {
+        showSnackbar(`保存宠物失败：${err.message}`);
+      }
+    }
+
+    async function saveStudentProfile(event) {
+      event.preventDefault();
+      const name = document.getElementById('set-name').value.trim();
+      const grade = Number(document.getElementById('set-grade').value);
+      const subject_textbooks = {
+        chinese: document.getElementById('tb-chinese')?.value || '统编版',
+        math: document.getElementById('tb-math')?.value || '人教版',
+        english: document.getElementById('tb-english')?.value || '人教版 PEP（三年级起点）',
+        science: document.getElementById('tb-science')?.value || '教科版',
+      };
+      const voiceprint_consent = document.getElementById('set-voiceprint').checked;
+      const camera_consent = document.getElementById('set-camera').checked;
+      if (!name) {
+        showSnackbar('请填写孩子姓名');
+        return;
+      }
+      const res = await api(`/v1/guardian/students/${currentStudent}/settings`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          name,
+          grade,
+          subject_textbooks,
+          voiceprint_consent,
+          camera_consent,
+        }),
+      });
+      STUDENTS[currentStudent] = {
+        name: res.name,
+        avatar: res.name.slice(-1),
+        grade: res.grade,
+        meta: GRADE_LABELS[res.grade] || `${res.grade}年级`,
+        textbook: res.textbook_version,
+        subject_textbooks: res.subject_textbooks || subject_textbooks,
+        voiceprint_consent: res.voiceprint_consent,
+        camera_consent: res.camera_consent,
+      };
+      await renderStudentProfileForm();
+      loadToday();
+      showSnackbar(`已保存「${res.name}」的档案与各科教材版本`);
+    }
+
+    function confirmRevokeCamera() {
+      openConfirmDialog({
+        title: '撤回摄像头授权并清空照片？',
+        body: '撤回后，系统将立即物理删除该孩子的所有作业提交留证照片，且桌宠不再调用摄像头模块。',
+        okLabel: '撤回并清空',
+        onConfirm: async () => {
+          const res = await api(`/v1/guardian/students/${currentStudent}/settings`, {
+            method: 'PATCH',
+            body: JSON.stringify({ camera_consent: false }),
+          });
+          showSnackbar(`已撤回授权，清除 ${res.purged_photos} 张历史照片`);
+        },
+      });
+    }
+
+    async function loadMemories() {
+      const rows = await api(`/v1/guardian/students/${currentStudent}/memories`);
+      const list = document.getElementById('memory-list');
+      if (!rows.length) {
+        list.innerHTML = `<p class="body-sm">当前没有保存的长期学习记忆。</p>`;
+        return;
+      }
+      list.innerHTML = rows.map((m) => `
+        <div class="setting-row" style="padding-block: 10px;">
+          <div class="setting-info">
+            <span class="badge badge-neutral" style="margin-block-end: 4px;">${escapeHtml(m.kind)}</span>
+            <div class="body-sm" style="color: var(--md-sys-color-on-surface);">${escapeHtml(m.summary)}</div>
+          </div>
+          <button type="button" class="btn btn-text btn-sm" style="color: var(--md-sys-color-error);" onclick="confirmDeleteMemory('${escapeHtml(m.id)}')">删除</button>
+        </div>
+      `).join('');
+    }
+
+    function confirmDeleteMemory(id) {
+      openConfirmDialog({
+        title: '删除这条学习记忆？',
+        body: '删除后，芽米将立即移除该条记忆，不再用于后续对话。',
+        okLabel: '确认删除',
+        onConfirm: async () => {
+          await api(`/v1/guardian/students/${currentStudent}/memories/${id}`, { method: 'DELETE' });
+          showSnackbar('已删除学习记忆');
+          loadMemories();
+        },
+      });
+    }
+
+    // Initialize on load (do NOT auto-seed demo data so real synced assignments stay clean)
+    (async function init() {
+      await refreshAuthStatus();
+      await loadStudents();
+      await loadToday();
+      await loadGrowthAnalytics();
+    })();
+  </script>
+</body>
+</html>

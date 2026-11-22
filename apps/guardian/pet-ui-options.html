@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>芽米宠物小屋 · 9 只 Hatch-Pet 动态伙伴预览</title>
+  <style>
+    :root {
+      --bg: #F6F3E9;
+      --card: #FFFFFF;
+      --border: #E5DFCE;
+      --ink: #1B2D24;
+      --muted: #5A6F64;
+      --green: #146342;
+      --green-soft: #E3F3EB;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    .sub { color: var(--muted); margin: 0 0 20px; font-size: 14px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .pill-btn {
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 99px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pill-btn.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: 0 8px 22px rgba(45, 58, 48, 0.08);
+    }
+    .card-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .title { font-weight: 700; font-size: 16px; }
+    .tag {
+      font-size: 12px;
+      background: var(--green-soft);
+      color: var(--green);
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+    .stage {
+      position: relative;
+      height: 210px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 3px solid #fff;
+      box-shadow: inset 0 0 0 1px var(--border);
+      background: #EDE8D8;
+    }
+    .stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .actor-wrap {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      width: 124px;
+      height: 124px;
+      transform: translateX(-50%);
+      transition: left 140ms linear;
+    }
+    .shadow {
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      width: 72px;
+      height: 16px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(64,48,32,0.34), transparent 72%);
+    }
+    .actor {
+      width: 124px;
+      height: 124px;
+      background-repeat: no-repeat;
+      background-size: 400% 400%;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>芽米宠物小屋 · 9 只 Hatch-Pet 动态伙伴画廊</h1>
+    <p class="sub">每只宠物均为 4×4 透明通道逐帧精灵图（待机眨眼 / 左右巡游行走 / 喂食欢呼 / 饥饿委屈），与 Mosaico 480×480 固件渲染完全同步。</p>
+    <div class="controls">
+      <button class="pill-btn active" onclick="setMode('patrol', this)">自主巡游（走+停+眨眼）</button>
+      <button class="pill-btn" onclick="setMode('idle', this)">Row 0 · 待机呼吸/眨眼</button>
+      <button class="pill-btn" onclick="setMode('walk', this)">Row 1 · 奔跑巡游</button>
+      <button class="pill-btn" onclick="setMode('joy', this)">Row 2 · 喂食欢呼</button>
+      <button class="pill-btn" onclick="setMode('hungry', this)">Row 3 · 饥饿委屈</button>
+    </div>
+    <div class="grid" id="gallery"></div>
+  </div>
+  <script>
+    const PETS = [
+      { id: 0, key: 'nebula_dragon', name: '星云小龙 · 星宝', group: '奇幻星灵' },
+      { id: 1, key: 'cloud_puff',    name: '棉花糖云 · 绵绵', group: '奇幻星灵' },
+      { id: 2, key: 'mochi_fox',     name: '麻薯灵狐 · 莓莓', group: '奇幻星灵' },
+      { id: 3, key: 'capybara',      name: '泡芙水豚 · 佛系橘', group: '萌趣伙伴' },
+      { id: 4, key: 'astro_penguin', name: '宇航企鹅 · 啵啵', group: '萌趣伙伴' },
+      { id: 5, key: 'chibi_rex',     name: '呆萌恐龙 · 咔咔', group: '萌趣伙伴' },
+      { id: 6, key: 'volt_robo',     name: '雷电机甲 · 闪闪', group: '星际潮玩' },
+      { id: 7, key: 'aurora_dragon', name: '极光星龙 · 幻幻', group: '星际潮玩' },
+      { id: 8, key: 'sakura_fox',    name: '樱花灵狐 · 桃桃', group: '星际潮玩' },
+    ];
+    let mode = 'patrol';
+    function setMode(m, btn) {
+      mode = m;
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    const states = PETS.map((p, i) => ({ ...p, x: 35 + (i % 3) * 15, tx: 65, dir: 1, pause: i * 3 }));
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = states.map(p => `
+      <div class="card">
+        <div class="card-hd">
+          <div class="title">${p.name}</div>
+          <span class="tag">${p.group}</span>
+        </div>
+        <div class="stage">
+          <img src="/guardian/assets/pets/stage_sunny_room.png" alt="阳光小屋" />
+          <div class="actor-wrap" id="wrap-${p.id}">
+            <div class="shadow"></div>
+            <div class="actor" id="actor-${p.id}" style="background-image:url('/guardian/assets/pets/pet_${p.id}_${p.key}_atlas.png')"></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    let tick = 0;
+    setInterval(() => {
+      tick += 1;
+      states.forEach((s) => {
+        const wrap = document.getElementById(`wrap-${s.id}`);
+        const actor = document.getElementById(`actor-${s.id}`);
+        let row = 0, col = 0, flip = false;
+        if (mode === 'idle') {
+          row = 0; col = [0,0,1,1,2,3,1,0][Math.floor(tick / 2) % 8];
+        } else if (mode === 'walk') {
+          row = 1; col = tick % 4;
+          s.x += s.dir * 2.4;
+          if (s.x > 74) s.dir = -1;
+          if (s.x < 26) s.dir = 1;
+          flip = s.dir < 0;
+        } else if (mode === 'joy') {
+          row = 2; col = Math.floor(tick / 2) % 4;
+        } else if (mode === 'hungry') {
+          row = 3; col = Math.floor(tick / 3) % 4;
+        } else {
+          const dx = s.tx - s.x;
+          if (Math.abs(dx) > 2.2) {
+            s.dir = dx >= 0 ? 1 : -1;
+            s.x += Math.sign(dx) * 2.0;
+            row = 1; col = tick % 4; flip = s.dir < 0;
+          } else if (s.pause > 0) {
+            s.pause -= 1;
+            row = 0; col = [0,0,1,1,2,3,1,0][Math.floor(tick / 2) % 8];
+          } else {
+            s.tx = [26, 44, 58, 72][Math.floor(Math.random() * 4)];
+            s.pause = 12 + Math.floor(Math.random() * 14);
+          }
+        }
+        wrap.style.left = `${s.x}%`;
+        actor.style.backgroundPosition = `${(col * 100) / 3}% ${(row * 100) / 3}%`;
+        actor.style.transform = flip ? 'scaleX(-1)' : 'scaleX(1)';
+      });
+    }, 150);
+  </script>
+</body>
+</html>

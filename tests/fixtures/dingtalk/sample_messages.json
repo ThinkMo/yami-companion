@@ -1,0 +1,91 @@
+{
+  "conversation_id": "conv_class_3_2_demo",
+  "authorized_teachers": {
+    "teacher_wang": "数学",
+    "teacher_li": "语文",
+    "teacher_chen": "英语"
+  },
+  "initial_batch": {
+    "page_complete": true,
+    "watermark_iso": "2026-11-18T16:30:00+08:00",
+    "messages": [
+      {
+        "message_id": "msg_001",
+        "sender_id": "teacher_wang",
+        "sender_name": "王老师",
+        "published_at": "2026-11-18T16:10:00+08:00",
+        "subject": "数学",
+        "content": "今天数学作业：练习册第 24 页 1–6 题，明天交纸质。",
+        "page_ref": "第 24 页",
+        "item_range": "1–6 题",
+        "submission_mode": "paper_next_day",
+        "due_at": "2026-11-19T08:00:00+08:00",
+        "attachments": []
+      },
+      {
+        "message_id": "msg_002",
+        "sender_id": "teacher_li",
+        "sender_name": "李老师",
+        "published_at": "2026-11-18T15:40:00+08:00",
+        "subject": "语文",
+        "content": "读第 8 课，背诵第 2 段。",
+        "page_ref": "第 8 课",
+        "item_range": "背诵第 2 段",
+        "submission_mode": "unknown",
+        "due_at": null,
+        "unclear_reason": "背诵没写截止时间和提交方式",
+        "attachments": []
+      },
+      {
+        "message_id": "msg_003",
+        "sender_id": "teacher_chen",
+        "sender_name": "陈老师",
+        "published_at": "2026-11-18T15:55:00+08:00",
+        "subject": "英语",
+        "content": "朗读 Unit 3 课文，今晚 20:00 前在钉钉家校本提交。",
+        "page_ref": "Unit 3",
+        "item_range": "课文朗读",
+        "submission_mode": "dingtalk_online",
+        "due_at": "2026-11-18T20:00:00+08:00",
+        "attachments": [
+          {
+            "ref_id": "att_001",
+            "kind": "audio",
+            "status": "permission_denied"
+          }
+        ]
+      },
+      {
+        "message_id": "msg_004",
+        "sender_id": "parent_other",
+        "sender_name": "某家长",
+        "published_at": "2026-11-18T16:15:00+08:00",
+        "subject": "数学",
+        "content": "收到老师！",
+        "submission_mode": "none",
+        "due_at": null,
+        "attachments": []
+      }
+    ]
+  },
+  "correction_batch": {
+    "page_complete": true,
+    "watermark_iso": "2026-11-18T17:10:00+08:00",
+    "messages": [
+      {
+        "message_id": "msg_005",
+        "revises_message_id": "msg_001",
+        "sender_id": "teacher_wang",
+        "sender_name": "王老师",
+        "published_at": "2026-11-18T17:05:00+08:00",
+        "subject": "数学",
+        "content": "更正：练习册第 24 页 1–5 题；第 6 题改为选做，明天交纸质。",
+        "page_ref": "第 24 页",
+        "item_range": "1–5 题；第 6 题选做",
+        "submission_mode": "paper_next_day",
+        "due_at": "2026-11-19T08:00:00+08:00",
+        "attachments": []
+      }
+    ]
+  }
+}
