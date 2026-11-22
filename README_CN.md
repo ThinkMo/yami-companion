@@ -109,6 +109,13 @@ git clone https://github.com/ThinkMo/yami-companion.git && cd yami-companion && 
 
 ---
 
+## 设计与架构文档
+
+- [系统架构设计 (中文)](./docs/ARCHITECTURE_CN.md) · [System Architecture (EN)](./docs/ARCHITECTURE.md)
+- [UI 与交互设计规范 (中文)](./docs/UI_UX_CN.md) · [UI & UX Design System (EN)](./docs/UI_UX.md)
+
+---
+
 ## License
 
 [MIT License](./LICENSE)

@@ -114,6 +114,13 @@ Before pushing to a public repository, verify that these local files remain igno
 
 ---
 
+## Documentation
+
+- [System Architecture (EN)](./docs/ARCHITECTURE.md) · [系统架构设计 (中文)](./docs/ARCHITECTURE_CN.md)
+- [UI & UX Design System (EN)](./docs/UI_UX.md) · [UI 与交互设计规范 (中文)](./docs/UI_UX_CN.md)
+
+---
+
 ## License
 
 [MIT License](./LICENSE)

@@ -8,7 +8,8 @@ __pycache__/
 .devcontainer/
 .superpowers/
 design-system/
-docs/
+docs/superpowers/
+docs/yami/
 firmware/
 .venv/
 node_modules/
