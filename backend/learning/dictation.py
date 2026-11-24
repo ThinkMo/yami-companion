@@ -196,6 +196,91 @@ def create_dictation_session(
     return sess
 
 
+def _extract_explicit_word_list(
+    utterance: str,
+) -> tuple[str, Literal["语文", "英语"], list[tuple[str, str]]]:
+    """Parse explicit dictation words provided inline or line-by-line by a parent.
+
+    Supports formats such as:
+      - "就是听写一下词语；第 17 组：\n\n崇山峻岭\n盘旋\n扩建\n修筑"
+      - "听写：崇山峻岭、盘旋、扩建、修筑"
+      - "听写英语单词：apple, banana, library"
+    """
+    raw = (utterance or "").strip()
+    if not raw:
+        return "家长自定义听写", "语文", []
+
+    # Extract an optional human-friendly title (e.g. "第 17 组")
+    title = "家长自定义听写"
+    m_group = re.search(r"(第\s*[0-9一二三四五六七八九十]+\s*[组课单元]+)", raw)
+    if m_group:
+        title = f"{m_group.group(1).strip()}听写"
+
+    lines = [ln.strip() for ln in raw.splitlines() if ln.strip()]
+    candidates: list[str] = []
+
+    if len(lines) >= 2:
+        # Multi-line input: drop leading instruction line(s) containing 听写 / 词语 / 单词 / :
+        for idx, ln in enumerate(lines):
+            if idx == 0 and (
+                any(k in ln for k in ("听写", "词语", "单词", "生字", "默写"))
+                or ln.endswith((":", "："))
+            ):
+                # Also capture any words after a colon on the first line
+                if ":" in ln or "：" in ln:
+                    tail = re.split(r"[:：]", ln, maxsplit=1)[1].strip()
+                    if tail:
+                        candidates.extend(re.split(r"[、,，;；\s]+", tail))
+                continue
+            cleaned = re.sub(r"^(?:\d+[\.\)、\)\s]+|[-•*]\s*)", "", ln).strip()
+            if cleaned:
+                # A line might contain multiple words separated by 、/,/spaces
+                parts = [p.strip() for p in re.split(r"[、,，;；]+", cleaned) if p.strip()]
+                candidates.extend(parts)
+    else:
+        # Single-line input: only extract explicit words if there is a colon or multiple delimiters
+        body = raw
+        if ":" in body or "：" in body:
+            body = re.split(r"[:：]", body, maxsplit=1)[1].strip()
+        elif any(sep in body for sep in ("、", ",", "，")):
+            body = re.sub(r"^.*?听写(?:一下|词语|生字|单词|英文|语文|英语)?", "", body).strip(" ：:，,；;")
+        else:
+            body = ""
+        if body:
+            for p in re.split(r"[、,，;；\s]+", body):
+                cleaned = re.sub(r"^(?:\d+[\.\)、\)]+)", "", p).strip()
+                if cleaned:
+                    candidates.append(cleaned)
+
+    # Filter out noise / non-word sentences; keep valid Chinese/English dictation words
+    words: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    en_count = 0
+    for c in candidates:
+        c = c.strip("。！？.!?\"'“”()（）")
+        if not c or len(c) > 28:
+            continue
+        if any(bad in c for bad in ("听写", "帮我", "孩子", "请问", "词表", "单元", "第", "组")):
+            # Skip instructional phrases unless it's a pure short word like "第一"
+            if len(c) > 3:
+                continue
+        if c in seen:
+            continue
+        seen.add(c)
+        if re.fullmatch(r"[A-Za-z][A-Za-z\s'-]{0,24}", c):
+            en_count += 1
+        words.append((c, ""))
+
+    # Require at least 2 words (or 1 word on explicit multi-line list) to avoid false triggers
+    if len(words) < 2 and len(lines) < 2:
+        return title, "语文", []
+
+    subject: Literal["语文", "英语"] = (
+        "英语" if (en_count > len(words) / 2 or re.search(r"英语|英文|单词", raw, re.IGNORECASE)) else "语文"
+    )
+    return title, subject, words
+
+
 def start_dictation_from_request(
     db: Session,
     *,
@@ -206,8 +291,9 @@ def start_dictation_from_request(
 ) -> tuple[Optional[DictationSession], str]:
     """
     End-to-end natural-language dictation entry:
-    Looks up the student's textbook version & grade in verified teaching materials.
-    Returns (None, honest_missing_message) if the lesson is not in the curriculum bank.
+    1. Checks verified curriculum bank by grade/textbook/unit/lesson.
+    2. If not matched, parses explicit word list directly provided in the message.
+    3. Otherwise returns an honest missing-material message.
     """
     student = db.get(Student, student_id)
     if student is None or student.family_id != family_id:
@@ -218,30 +304,45 @@ def start_dictation_from_request(
         grade=student.grade,
         utterance=utterance,
     )
-    if pack is None:
-        from backend.services.textbook_catalog import parse_subject_textbooks
-
-        tb_display = student.textbook_version or "人教版"
-        if tb_display.strip().startswith("{"):
-            tb_map = parse_subject_textbooks(tb_display)
-            is_en = bool(re.search(r"英语|英文|unit|word|单词", utterance, re.IGNORECASE))
-            tb_display = tb_map.get("english" if is_en else "chinese") or "人教版"
-        return (
-            None,
-            f"我还没找到{student.grade}年级{tb_display}这课的听写材料，请家长补充词表或先告诉我具体词语。",
+    if pack is not None:
+        sess = create_dictation_session(
+            db,
+            family_id=family_id,
+            student_id=student_id,
+            subject=pack.subject,
+            source=source,
+            title=pack.title,
+            words=pack.words,
         )
+        first = dictation_action(db, session_id=sess.id, action="current")
+        return sess, f"好，开始{pack.title}，共 {len(pack.words)} 个词。准备好纸笔，{first.spoken_text}"
 
-    sess = create_dictation_session(
-        db,
-        family_id=family_id,
-        student_id=student_id,
-        subject=pack.subject,
-        source=source,
-        title=pack.title,
-        words=pack.words,
+    # Fallback: parent/student directly provided the explicit word list in the message
+    custom_title, custom_subject, explicit_words = _extract_explicit_word_list(utterance)
+    if explicit_words:
+        sess = create_dictation_session(
+            db,
+            family_id=family_id,
+            student_id=student_id,
+            subject=custom_subject,
+            source=source,
+            title=custom_title,
+            words=explicit_words,
+        )
+        first = dictation_action(db, session_id=sess.id, action="current")
+        return sess, f"好，开始{custom_title}，共 {len(explicit_words)} 个词。准备好纸笔，{first.spoken_text}"
+
+    from backend.services.textbook_catalog import parse_subject_textbooks
+
+    tb_display = student.textbook_version or "人教版"
+    if tb_display.strip().startswith("{"):
+        tb_map = parse_subject_textbooks(tb_display)
+        is_en = bool(re.search(r"英语|英文|unit|word|单词", utterance, re.IGNORECASE))
+        tb_display = tb_map.get("english" if is_en else "chinese") or "人教版"
+    return (
+        None,
+        f"我还没找到{student.grade}年级{tb_display}这课的听写材料，请家长补充词表或先告诉我具体词语。",
     )
-    first = dictation_action(db, session_id=sess.id, action="current")
-    return sess, f"好，开始{pack.title}，共 {len(pack.words)} 个词。准备好纸笔，{first.spoken_text}"
 
 
 def get_active_dictation(db: Session, *, student_id: str) -> Optional[DictationSession]:

@@ -109,3 +109,18 @@ def test_guardian_natural_dictation_and_hardware_audio_turn(client):
     assert len(audio_resp.content) > 1000
     assert audio_resp.headers["x-yami-intent"] == "dictation_step"
     assert audio_resp.headers["x-yami-audio-in-bytes"] == str(len(fake_pcm))
+
+
+def test_explicit_multiline_word_list_dictation_from_dingtalk(client):
+    msg = "就是听写一下词语；第 17 组：\n\n崇山峻岭\n\n盘旋\n\n扩建\n\n修筑\n\n平整"
+    res = client.post(
+        "/v1/dingtalk/bot/callback",
+        headers={"X-Family-Id": "fam_a"},
+        json={"family_id": "fam_a", "student_id": "stu_he", "senderNick": "家长", "text": {"content": msg}},
+    )
+    assert res.status_code == 200
+    body = res.json()
+    assert body.get("dictation_session_id") is not None
+    assert "第 17 组听写" in body["markdown"]["text"]
+    assert "共 5 个词" in body["markdown"]["text"]
+    assert "崇山峻岭" in body["markdown"]["text"]

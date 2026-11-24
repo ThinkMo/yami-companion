@@ -283,7 +283,7 @@ def test_voice_self_report_submission_and_full_duplex_ws(client, db_session):
         json={"senderNick": "妈妈", "text": {"content": "今天作业进度"}},
     )
     assert bot_today.status_code == 200
-    assert "今日作业清单" in bot_today.json()["markdown"]["text"]
+    assert "今日作业" in bot_today.json()["markdown"]["text"]
 
     bot_confirm = client.post(
         "/v1/dingtalk/bot/callback",

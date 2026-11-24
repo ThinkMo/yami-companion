@@ -176,6 +176,10 @@ def api_issue_pairing(payload: PairingIssueRequest, db: Session = Depends(get_db
         has_camera=payload.has_camera,
         firmware_version=payload.firmware_version,
     )
+    # Clear any stale desk_check_seq on fresh device boot to prevent camera-trigger boot loops
+    if getattr(device, "desk_check_seq", 0):
+        device.desk_check_seq = 0
+        db.commit()
     return PairingIssueResponse(device_id=device.id, pairing_code=pairing.code, expires_at=pairing.expires_at)
 
 
